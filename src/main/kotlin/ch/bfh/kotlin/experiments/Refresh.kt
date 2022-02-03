@@ -59,7 +59,7 @@ class RefreshView : View("Refreshing view") {
 
         button(inputProperty) //bind to whatever you want :D
 
-        button("add next i") {
+        button("add next element") {
             action { addHistoryItem(nextElement++) }
         }
 
