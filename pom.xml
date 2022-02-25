@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ch.bfh</groupId>
-  <artifactId>game2048</artifactId>
+  <artifactId>kotlin_examples</artifactId>
   <version>1.0</version>
   <packaging>jar</packaging>
 
@@ -23,8 +23,8 @@
 	<javafx.maven.version>0.0.8</javafx.maven.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<exec.maven.version>3.0.0</exec.maven.version>
-	<main.class.console>ch.bfh.bti3001.game2048.Game2048ConsoleKt</main.class.console>
-	<main.class.javafx>ch.bfh.bti3001.game2048.Game2048AppKt</main.class.javafx>
+	<main.class.console>ch.bfh.kotlin.experiments.PlaygroundKt</main.class.console>
+	<main.class.javafx>ch.bfh.kotlin.experiments.PlaygroundKt</main.class.javafx>
   </properties>
 
   <dependencies>
