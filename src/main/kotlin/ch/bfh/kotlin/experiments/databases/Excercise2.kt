@@ -48,3 +48,27 @@ fun same2(l1: MutableList<Int>, l2: MutableList<Int>): Boolean {
 
     return true
 }
+
+fun subset(arr1: BooleanArray, arr2: BooleanArray): Boolean {
+    if(arr1.size > arr2.size) {
+        return false
+    }
+
+    for(i in arr1.indices) {
+        if(arr1[i] && !arr2[i]) {
+            return false
+        }
+    }
+
+    return true
+}
+
+fun union(arr1: BooleanArray, arr2: BooleanArray): BooleanArray {
+    val newSize = if (arr1.size > arr2.size) arr1.size else arr2.size
+    val unionArr = BooleanArray(newSize)
+
+    for(i in 0 until newSize) {
+        unionArr[i] =  arr1.getOrElse(i){false} || arr2.getOrElse(i){false}
+    }
+    return unionArr
+}
