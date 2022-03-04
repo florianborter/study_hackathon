@@ -101,3 +101,19 @@ fun compose2(arr1: List<Pair<Int, Int>>, arr2: List<Pair<Int, Int>>): MutableLis
     }
     return res
 }
+
+fun composition_breadly(arr1: Array<BooleanArray>, arr2: Array<BooleanArray>): Array<BooleanArray> {
+    val newList = Array<BooleanArray>(arr1.size){ BooleanArray(arr2.size){ _ -> false} }
+
+    for (i in arr1.indices) {
+        for(j in arr2.indices) {
+            if(arr1[i][j]) {
+                for (c in newList[i].indices) {
+                    newList[i][c] = newList[i].getOrElse(c){false} || arr2[j][c]
+                }
+            }
+        }
+    }
+
+    return newList
+}
