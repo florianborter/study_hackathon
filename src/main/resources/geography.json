@@ -1,0 +1,22 @@
+{
+  "name": "Switzerland",
+  "capital": {
+    "name": "Bern"
+  },
+  "languages": [
+    "German",
+    "French",
+    "Italian"
+  ],
+  "area": 41285,
+  "cantons": [
+    {
+      "name": "Zurich",
+      "abbreviation": "ZH"
+    },
+    {
+      "name": "Berne",
+      "abbreviation": "BE"
+    }
+  ]
+}
