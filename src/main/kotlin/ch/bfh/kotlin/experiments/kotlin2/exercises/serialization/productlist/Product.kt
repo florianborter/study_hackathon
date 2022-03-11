@@ -1,4 +1,4 @@
-package ch.bfh.kotlin.experiments.kotlin2.exercises.productlist
+package ch.bfh.kotlin.experiments.kotlin2.exercises.serialization.productlist
 
 import java.io.Serializable
 
