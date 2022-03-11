@@ -1,11 +1,7 @@
 package ch.bfh.kotlin.experiments.and
 
 import kotlinx.coroutines.*
-import tornadofx.runAsync
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-import kotlin.concurrent.thread
 
 interface DivideAndConquerable<OutputType> {
     val isBasic: Boolean
@@ -64,6 +60,30 @@ interface DivideAndConquerableConcurrent<OutputType>: DivideAndConquerable<Outpu
     override fun decompose(): List<DivideAndConquerableConcurrent<Int>?>?
 }
 
+interface DivideAndConquerableMemory<OutputType>: DivideAndConquerable<OutputType> {
+    fun divideAndConquer(memorized: IntArray): OutputType {
+        if (this.isBasic) return baseFun()
+        val subcomponents: List<DivideAndConquerableMemory<Int>?>? = decompose()
+        val intermediateResults: MutableList<Int?> = ArrayList(
+            subcomponents!!.size
+        )
+
+        subcomponents.forEach { subcomponent: DivideAndConquerableMemory<Int>? ->
+            intermediateResults.add(
+                memoryOrDefault(subcomponent, memorized)
+            )
+        }
+
+        return recombine(intermediateResults)
+    }
+
+    fun memoryOrDefault(d: DivideAndConquerableMemory<Int>?, memory: IntArray): Int {
+        return d!!.divideAndConquer()
+    }
+
+    override fun decompose(): List<DivideAndConquerableMemory<Int>?>?
+}
+
 class FibonacciConquer(private val fib: Int) : DivideAndConquerable<Int> {
     override val isBasic: Boolean
         get() = fib <= 1
@@ -100,13 +120,42 @@ class FibonacciConquerConcurrent(private val fib: Int) : DivideAndConquerableCon
 
 }
 
+class FibonacciConquerMemory(private val fib: Int) : DivideAndConquerableMemory<Int> {
+    override val isBasic: Boolean
+        get() = fib <= 1
 
+    override fun baseFun(): Int {
+        return fib
+    }
 
+    override fun decompose(): List<DivideAndConquerableMemory<Int>?>? {
+        return listOf(FibonacciConquerMemory(fib-2), FibonacciConquerMemory(fib-1))
+    }
+
+    override fun recombine(intermediateResults: MutableList<Int?>): Int {
+        return intermediateResults[0]!! + intermediateResults[1]!!
+    }
+
+    override fun memoryOrDefault(d: DivideAndConquerableMemory<Int>?, memory: IntArray): Int {
+        if (memory[fib] != 0) {
+            return memory[fib]
+        }
+        memory[fib] = d!!.divideAndConquer()
+        return memory[fib]
+    }
+
+}
 
 
 fun main(args: Array<String>) {
     val fib = 45
 
+    val memory = IntArray(fib + 1){0}
+    val start3 = System.nanoTime()
+    println(FibonacciConquerMemory(fib).divideAndConquer(memory))
+    val end3 = System.nanoTime()
+
+    // beware ! This one is slow somehow
     val dispatcher = Executors.newFixedThreadPool(6).asCoroutineDispatcher()
     val start2 = System.nanoTime()
     println(FibonacciConquerConcurrent(fib).divideAndConquer(dispatcher))
@@ -117,7 +166,8 @@ fun main(args: Array<String>) {
     val end1 = System.nanoTime()
 
 
-
+    println("Memory fibonacci $fib:")
+    println("passed Time: ${(end3 - start3) / 1000000000 }")
     println("Non-Optimised fibonacci $fib:")
     println("passed Time: ${(end1 - start1) / 1000000000 }")
     println("Threaded fibonacci $fib:")
