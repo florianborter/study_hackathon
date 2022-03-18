@@ -1,0 +1,48 @@
+{
+  "persons": [
+    {
+      "id": 0,
+      "firstName": "Leonhard",
+      "lastName": "Euler",
+      "professions": [
+        "physicist",
+        "mathematician"
+      ],
+      "birthData": {
+        "date": "1707-04-15",
+        "city": "Basel",
+        "country": "CH"
+      }
+    },
+    {
+      "id": 1,
+      "firstName": "Albert",
+      "lastName": "Einstein",
+      "professions": [
+        "school teacher",
+        "public servant",
+        "associate professor"
+      ],
+      "birthData": {
+        "date": "1879-03-14",
+        "city": "Ulm",
+        "country": "DE"
+      }
+    },
+    {
+      "id": 2,
+      "firstName": "Alan",
+      "lastName": "Turing",
+      "professions": [
+        "computer scientist",
+        "mathematician",
+        "cryptographer"
+      ],
+      "birthData": {
+        "date": "1912-06-23",
+        "city": "London",
+        "country": "UK"
+      }
+    }
+  ]
+}
