@@ -1,6 +1,12 @@
 package ch.bfh.kotlin.experiments.and
 
+import javafx.geometry.Pos
+import javafx.scene.chart.CategoryAxis
+import javafx.scene.chart.NumberAxis
+import javafx.scene.chart.XYChart
+import javafx.stage.Stage
 import kotlinx.coroutines.*
+import tornadofx.*
 import java.util.concurrent.Executors
 
 interface DivideAndConquerable<OutputType> {
@@ -146,32 +152,63 @@ class FibonacciConquerMemory(private val fib: Int) : DivideAndConquerableMemory<
 
 }
 
-
 fun main(args: Array<String>) {
-    val fib = 45
+    launch<Chart>(args)
+}
 
-    val memory = IntArray(fib + 1){0}
-    val start3 = System.nanoTime()
-    println(FibonacciConquerMemory(fib).divideAndConquer(memory))
-    val end3 = System.nanoTime()
+class Chart : App(ChartView::class) {
+    override fun start(stage: Stage) {
+        stage.width = 500.0
+        stage.height = 500.0
+        super.start(stage)
+    }
+}
 
-    // beware ! This one is slow somehow
-    val dispatcher = Executors.newFixedThreadPool(6).asCoroutineDispatcher()
-    val start2 = System.nanoTime()
-    println(FibonacciConquerConcurrent(fib).divideAndConquer(dispatcher))
-    val end2 = System.nanoTime()
+class ChartView : View("Fibonacci Chart") {
+    override val root = vbox(20, alignment = Pos.CENTER)
+    init {
+        val linechart = linechart("Chart for fib methods", CategoryAxis(), NumberAxis())
 
-    val start1 = System.nanoTime()
-    println(FibonacciConquer(fib).divideAndConquer())
-    val end1 = System.nanoTime()
+        val fibonacciMetricsStart = 0
+        val fibonacciMetricsEnd = 50
+        val fibonacciMetricsStep = 5
 
+        val memoryFibonacciMetrics = XYChart.Series<String, Number>()
+        memoryFibonacciMetrics.name = "Fibonacci with memory"
+        for (i in fibonacciMetricsStart..fibonacciMetricsEnd step fibonacciMetricsStep) {
+            val memory = IntArray(i + 1){0}
+            val startTime = System.nanoTime()
+            FibonacciConquerMemory(i).divideAndConquer(memory)
+            val endTime = System.nanoTime()
+            memoryFibonacciMetrics.data.add(XYChart.Data(i.toString(), endTime-startTime))
+            println("Memory Fibonacci ($i) done")
+        }
+        linechart.data.add(memoryFibonacciMetrics)
 
-    println("Memory fibonacci $fib:")
-    println("passed Time: ${(end3 - start3) / 1000000000 }")
-    println("Non-Optimised fibonacci $fib:")
-    println("passed Time: ${(end1 - start1) / 1000000000 }")
-    println("Threaded fibonacci $fib:")
-    println("passed Time: ${(end2 - start2) / 1000000000 }")
+        val threadedFibonacciMetrics = XYChart.Series<String, Number>()
+        threadedFibonacciMetrics.name = "Fibonacci with threads"
+        for (i in fibonacciMetricsStart..fibonacciMetricsEnd step fibonacciMetricsStep) {
+            val dispatcher = Executors.newFixedThreadPool(6).asCoroutineDispatcher()
+            val startTime = System.nanoTime()
+            FibonacciConquerConcurrent(i).divideAndConquer(dispatcher)
+            val endTime = System.nanoTime()
+            threadedFibonacciMetrics.data.add(XYChart.Data(i.toString(), endTime-startTime))
+        }
+        linechart.data.add(threadedFibonacciMetrics)
+
+        val regularFibonacciMetrics = XYChart.Series<String, Number>()
+        regularFibonacciMetrics.name = "Fibonacci without optimization"
+        for (i in fibonacciMetricsStart..fibonacciMetricsEnd step fibonacciMetricsStep) {
+            val startTime = System.nanoTime()
+            FibonacciConquer(i).divideAndConquer()
+            val endTime = System.nanoTime()
+            regularFibonacciMetrics.data.add(XYChart.Data(i.toString(), endTime-startTime))
+            println("Regular Fibonacci ($i) done")
+        }
+        linechart.data.add(regularFibonacciMetrics)
+
+        this.root.add(linechart)
+    }
 }
 
 
