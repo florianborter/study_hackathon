@@ -1,4 +1,4 @@
-package ch.bfh.kotlin.experiments
+package ch.bfh.kotlin.experiments.kotlin1
 
 import javafx.geometry.Pos
 import javafx.scene.control.TextField

@@ -1,15 +1,10 @@
-package ch.bfh.kotlin.experiments
+package ch.bfh.kotlin.experiments.kotlin1
 
-import javafx.event.EventType
 import javafx.geometry.Pos
-import javafx.scene.control.Control
-import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
-import javafx.scene.text.Text
 import javafx.stage.Stage
 import tornadofx.*
-import java.beans.EventHandler
 import kotlin.random.Random
 
 fun main(args: Array<String>) {

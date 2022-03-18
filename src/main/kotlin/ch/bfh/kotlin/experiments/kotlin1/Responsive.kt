@@ -1,18 +1,10 @@
-package ch.bfh.kotlin.experiments
+package ch.bfh.kotlin.experiments.kotlin1
 
-import javafx.beans.Observable
-import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.Parent
-import javafx.scene.control.TextField
 import javafx.scene.paint.Color
-import javafx.scene.text.FontPosture
-import javafx.scene.text.FontWeight
 import javafx.stage.Stage
-import jdk.jfr.Percentage
 import tornadofx.*
-import java.awt.Paint
 
 
 fun main(args: Array<String>) {
@@ -35,7 +27,7 @@ class ResponsiveView : View("Look at this Styling") {
     }
 
     init {
-        primaryStage.widthProperty().addListener {_, _, newVal ->
+        primaryStage.widthProperty().addListener { _, _, newVal ->
             thirtyPercentWidth = newVal.toDouble() / 3
             thirtyButton.prefWidth = thirtyPercentWidth
         }
@@ -56,7 +48,7 @@ class ResponsiveView : View("Look at this Styling") {
             }
         }
         button("50% (no refresh)") {
-            prefWidth = primaryStage.width/2
+            prefWidth = primaryStage.width / 2
         }
         this += thirtyButton
     }

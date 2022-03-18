@@ -1,4 +1,4 @@
-package ch.bfh.kotlin.experiments
+package ch.bfh.kotlin.experiments.kotlin1
 
 import javafx.beans.property.SimpleStringProperty
 import javafx.event.EventHandler

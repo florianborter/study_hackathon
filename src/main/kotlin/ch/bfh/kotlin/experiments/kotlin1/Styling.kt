@@ -1,12 +1,7 @@
-package ch.bfh.kotlin.experiments
+package ch.bfh.kotlin.experiments.kotlin1
 
-import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.Parent
-import javafx.scene.control.TextField
 import javafx.scene.paint.Color
-import javafx.scene.text.FontPosture
-import javafx.scene.text.FontWeight
 import javafx.stage.Stage
 import tornadofx.*
 
