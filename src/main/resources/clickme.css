@@ -1,0 +1,23 @@
+.label {
+-fx-font-weight: bold;
+-fx-font-size: 14.0;
+-fx-text-fill: darkred;
+}
+
+.button {
+-fx-background-color: linear-gradient(#ffd65b, #e68400);
+-fx-background-radius: 20.0;
+-fx-background-insets: 0.0,1.0,2.0,3.0,0.0;
+-fx-text-fill: darkblue;
+-fx-font-weight: bold;
+-fx-font-size: 14.0px;
+-fx-padding: 5.0 10.0 5.0 10.0;
+}
+
+.button:hover {
+-fx-background-color: linear-gradient(#ffe68b, #f6a430);
+}
+
+.button:pressed {
+-fx-background-color: linear-gradient(#ffd65b, #a68400);
+}
