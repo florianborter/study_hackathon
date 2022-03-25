@@ -45,7 +45,7 @@ interface DivideAndConquerableConcurrent<OutputType>: DivideAndConquerable<Outpu
         )
 
 
-        if(Thread.activeCount() > 4) {
+        if(Thread.activeCount() > 10) {
             intermediateResults.add(subcomponents[0]!!.divideAndConquer(dispatcher))
             intermediateResults.add(subcomponents[1]!!.divideAndConquer(dispatcher))
         } else {
@@ -85,9 +85,7 @@ interface DivideAndConquerableMemory<OutputType>: DivideAndConquerable<OutputTyp
         return recombine(intermediateResults)
     }
 
-    fun memoryOrDefault(d: DivideAndConquerableMemory<Int>?, memory: IntArray): Int {
-        return d!!.divideAndConquer()
-    }
+    fun memoryOrDefault(d: DivideAndConquerableMemory<Int>?, memory: IntArray): Int
 
     override fun decompose(): List<DivideAndConquerableMemory<Int>?>?
 }
@@ -148,7 +146,7 @@ class FibonacciConquerMemory(private val fib: Int) : DivideAndConquerableMemory<
         if (memory[fib] != 0) {
             return memory[fib]
         }
-        memory[fib] = d!!.divideAndConquer()
+        memory[fib] = d!!.divideAndConquer(memory)
         return memory[fib]
     }
 
@@ -171,7 +169,7 @@ class ChartView : View("Fibonacci Chart") {
     init {
         val linechart = linechart("Chart for fib methods", CategoryAxis(), NumberAxis())
 
-        val fibonacciMetricsStart = 25
+        val fibonacciMetricsStart = 5
         val fibonacciMetricsEnd = 40
         val fibonacciMetricsStep = 5
 
@@ -190,7 +188,7 @@ class ChartView : View("Fibonacci Chart") {
         val threadedFibonacciMetrics = XYChart.Series<String, Number>()
         threadedFibonacciMetrics.name = "Fibonacci with threads"
         for (i in fibonacciMetricsStart..fibonacciMetricsEnd step fibonacciMetricsStep) {
-            val dispatcher = Executors.newFixedThreadPool(6).asCoroutineDispatcher()
+            val dispatcher = Executors.newFixedThreadPool(12).asCoroutineDispatcher()
             val startTime = System.nanoTime()
             FibonacciConquerConcurrent(i).divideAndConquer(dispatcher)
             val endTime = System.nanoTime()
