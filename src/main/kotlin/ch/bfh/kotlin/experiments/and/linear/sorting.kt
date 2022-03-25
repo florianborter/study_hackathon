@@ -6,15 +6,21 @@ fun main() {
     println(insertionSort(toBeSorted).joinToString { it.toString() })
 }
 
-
+// θ( (n^2 - 3n + 2 ) / 2)
 fun insertionSort(input: IntArray): IntArray {
     return if (input.size < 2) {input} else {
+        // θ(n)
         for (i in 1 until input.size) {
+            // θ(1)
             val currentValue = input[i]
+            // θ(1)
             var currentPrefixPosition = i - 1
+            // worst case θ(n-1)
             while (currentPrefixPosition >= 0 && currentValue < input[currentPrefixPosition]) {
+                // θ(1)
                 input[currentPrefixPosition + 1] = input[currentPrefixPosition--]
             }
+            // θ(1)
             input[currentPrefixPosition + 1] = currentValue
         }
         input

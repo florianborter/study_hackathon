@@ -9,6 +9,8 @@ import kotlinx.coroutines.*
 import tornadofx.*
 import java.util.concurrent.Executors
 
+
+// θ (2^n)
 interface DivideAndConquerable<OutputType> {
     val isBasic: Boolean
 
