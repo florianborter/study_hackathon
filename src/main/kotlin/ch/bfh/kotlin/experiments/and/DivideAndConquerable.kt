@@ -36,7 +36,7 @@ interface DivideAndConquerableConcurrent<OutputType>: DivideAndConquerable<Outpu
             subcomponents.size
         )
 
-        if(Thread.activeCount() > 10) {
+        if(Thread.activeCount() > 30) {
             for (x in subcomponents) {
                 intermediateResults.add(x.divideAndConquer(dispatcher))
             }

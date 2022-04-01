@@ -135,35 +135,61 @@ class ChartView : View("Mergesort Chart") {
     init {
         val linechart = linechart("Chart for mergesort methods", CategoryAxis(), NumberAxis())
 
-        val metricsStart = 1000000
-        val metricsEnd = 10000000
-        val step = 1000000
-
+        val inputSize = 7000000
+        val nThreads = 30
 
         val regularMergeSortMetrics = XYChart.Series<String, Number>()
         val concurrentMergeSortMetrics = XYChart.Series<String, Number>()
+        val sortMetrics = XYChart.Series<String, Number>()
+
+        val avgArrayRegular = Array<Long>(100){0}
+        val avgArrayConcurrent = Array<Long>(100){0}
+        val avgArrayKotlinSort = Array<Long>(100){0}
+
         regularMergeSortMetrics.name = "Mergesort"
         concurrentMergeSortMetrics.name = "Concurrent Mergesort"
-        for (i in metricsStart..metricsEnd step step) {
-            val input = Array<Int>(i){(0..Int.MAX_VALUE).random()}
+        sortMetrics.name = "Sort"
 
+        for (i in 0 until 10 step 1) {
+            val input = Array<Int>(inputSize){(0..Int.MAX_VALUE).random()}
+
+            System.gc()
             var startTime = System.nanoTime()
-            val dispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
+            val dispatcher = Executors.newFixedThreadPool(nThreads).asCoroutineDispatcher()
             MergeSortConcurrent(input).divideAndConquer(dispatcher)
             var endTime = System.nanoTime()
-            concurrentMergeSortMetrics.data.add(XYChart.Data(i.toString(), endTime-startTime))
+            concurrentMergeSortMetrics.data.add(XYChart.Data(i.toString(), (endTime-startTime) / 1000000))
+            avgArrayRegular[i] = (endTime-startTime) / 1000000
             println("Concurrent mergesort done ($i)")
 
+            System.gc()
             startTime = System.nanoTime()
             MergeSort(input).divideAndConquer()
             endTime = System.nanoTime()
-            regularMergeSortMetrics.data.add(XYChart.Data(i.toString(), endTime-startTime))
+            regularMergeSortMetrics.data.add(XYChart.Data(i.toString(), (endTime-startTime) / 1000000))
+            avgArrayConcurrent[i] = (endTime-startTime) / 1000000
             println("Mergesort done ($i)")
+
+            System.gc()
+            startTime = System.nanoTime()
+            input.sort()
+            endTime = System.nanoTime()
+            sortMetrics.data.add(XYChart.Data(i.toString(), (endTime-startTime) / 1000000))
+            avgArrayKotlinSort[i] = (endTime-startTime) / 1000000
+            println("Sort done ($i)")
+
         }
+
         linechart.data.add(regularMergeSortMetrics)
         linechart.data.add(concurrentMergeSortMetrics)
+        linechart.data.add(sortMetrics)
 
         this.root.add(linechart)
+
+        this.root.add(label("Regular Mergesort avg: ${avgArrayConcurrent.average()}"))
+        this.root.add(label("Concurrent mergesort avg: ${avgArrayRegular.average()}"))
+        this.root.add(label("Kotlin ArraySort avg: ${avgArrayKotlinSort.average()}"))
+        this.root.add(label("Number of Threads : $nThreads"))
     }
 }
 
