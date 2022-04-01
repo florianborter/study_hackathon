@@ -1,5 +1,8 @@
-package ch.bfh.kotlin.experiments.and
+package ch.bfh.kotlin.experiments.and.fibonacci
 
+import ch.bfh.kotlin.experiments.and.DivideAndConquerable
+import ch.bfh.kotlin.experiments.and.DivideAndConquerableConcurrent
+import ch.bfh.kotlin.experiments.and.DivideAndConquerableMemory
 import javafx.geometry.Pos
 import javafx.scene.chart.CategoryAxis
 import javafx.scene.chart.NumberAxis
@@ -8,87 +11,6 @@ import javafx.stage.Stage
 import kotlinx.coroutines.*
 import tornadofx.*
 import java.util.concurrent.Executors
-
-
-// θ (2^n)
-interface DivideAndConquerable<OutputType> {
-    val isBasic: Boolean
-
-    fun baseFun(): OutputType
-    fun decompose(): List<DivideAndConquerable<Int>?>?
-    fun recombine(intermediateResults: MutableList<Int?>): OutputType
-
-    fun stump(): List<DivideAndConquerable<OutputType>?>? {
-        return ArrayList(0)
-    }
-    fun divideAndConquer(): OutputType {
-        if (this.isBasic) return baseFun()
-        val subcomponents: List<DivideAndConquerable<Int>?>? = decompose()
-        val intermediateResults: MutableList<Int?> = ArrayList(
-            subcomponents!!.size
-        )
-        subcomponents.forEach { subcomponent: DivideAndConquerable<Int>? ->
-            intermediateResults.add(
-                subcomponent!!.divideAndConquer()
-            )
-        }
-        return recombine(intermediateResults)
-    }
-}
-
-interface DivideAndConquerableConcurrent<OutputType>: DivideAndConquerable<OutputType> {
-    fun divideAndConquer(dispatcher: ExecutorCoroutineDispatcher): OutputType {
-        if (this.isBasic) return baseFun()
-        val subcomponents: List<DivideAndConquerableConcurrent<Int>?>? = decompose()
-        val intermediateResults: MutableList<Int?> = ArrayList(
-            subcomponents!!.size
-        )
-
-
-        if(Thread.activeCount() > 10) {
-            intermediateResults.add(subcomponents[0]!!.divideAndConquer(dispatcher))
-            intermediateResults.add(subcomponents[1]!!.divideAndConquer(dispatcher))
-        } else {
-            runBlocking {
-                val one = async(dispatcher) {
-                    intermediateResults.add(subcomponents[0]!!.divideAndConquer(dispatcher))
-                }
-                val two = async(dispatcher) {
-                    intermediateResults.add(subcomponents[1]!!.divideAndConquer(dispatcher))
-                }
-
-                one.await()
-                two.await()
-            }
-
-        }
-        return recombine(intermediateResults)
-    }
-
-    override fun decompose(): List<DivideAndConquerableConcurrent<Int>?>?
-}
-
-interface DivideAndConquerableMemory<OutputType>: DivideAndConquerable<OutputType> {
-    fun divideAndConquer(memorized: IntArray): OutputType {
-        if (this.isBasic) return baseFun()
-        val subcomponents: List<DivideAndConquerableMemory<Int>?>? = decompose()
-        val intermediateResults: MutableList<Int?> = ArrayList(
-            subcomponents!!.size
-        )
-
-        subcomponents.forEach { subcomponent: DivideAndConquerableMemory<Int>? ->
-            intermediateResults.add(
-                memoryOrDefault(subcomponent, memorized)
-            )
-        }
-
-        return recombine(intermediateResults)
-    }
-
-    fun memoryOrDefault(d: DivideAndConquerableMemory<Int>?, memory: IntArray): Int
-
-    override fun decompose(): List<DivideAndConquerableMemory<Int>?>?
-}
 
 class FibonacciConquer(private val fib: Int) : DivideAndConquerable<Int> {
     override val isBasic: Boolean
