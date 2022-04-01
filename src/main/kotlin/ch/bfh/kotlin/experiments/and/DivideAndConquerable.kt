@@ -7,21 +7,21 @@ interface DivideAndConquerable<OutputType> {
     val isBasic: Boolean
 
     fun baseFun(): OutputType
-    fun decompose(): List<DivideAndConquerable<Int>?>?
-    fun recombine(intermediateResults: MutableList<Int?>): OutputType
+    fun decompose(): List<DivideAndConquerable<OutputType>>
+    fun recombine(intermediateResults: MutableList<OutputType>): OutputType
 
-    fun stump(): List<DivideAndConquerable<OutputType>?>? {
+    fun stump(): List<DivideAndConquerable<OutputType>> {
         return ArrayList(0)
     }
     fun divideAndConquer(): OutputType {
         if (this.isBasic) return baseFun()
-        val subcomponents: List<DivideAndConquerable<Int>?>? = decompose()
-        val intermediateResults: MutableList<Int?> = ArrayList(
-            subcomponents!!.size
+        val subcomponents: List<DivideAndConquerable<OutputType>> = decompose()
+        val intermediateResults: MutableList<OutputType> = ArrayList(
+            subcomponents.size
         )
-        subcomponents.forEach { subcomponent: DivideAndConquerable<Int>? ->
+        subcomponents.forEach { subcomponent: DivideAndConquerable<OutputType> ->
             intermediateResults.add(
-                subcomponent!!.divideAndConquer()
+                subcomponent.divideAndConquer()
             )
         }
         return recombine(intermediateResults)
@@ -31,14 +31,14 @@ interface DivideAndConquerable<OutputType> {
 interface DivideAndConquerableConcurrent<OutputType>: DivideAndConquerable<OutputType> {
     fun divideAndConquer(dispatcher: ExecutorCoroutineDispatcher): OutputType {
         if (this.isBasic) return baseFun()
-        val subcomponents: List<DivideAndConquerableConcurrent<Int>?>? = decompose()
-        val intermediateResults: MutableList<Int?> = ArrayList(
-            subcomponents!!.size
+        val subcomponents: List<DivideAndConquerableConcurrent<OutputType>> = decompose()
+        val intermediateResults: MutableList<OutputType> = ArrayList(
+            subcomponents.size
         )
 
         if(Thread.activeCount() > 10) {
             for (x in subcomponents) {
-                intermediateResults.add(x!!.divideAndConquer(dispatcher))
+                intermediateResults.add(x.divideAndConquer(dispatcher))
             }
         } else {
             runBlocking {
@@ -46,7 +46,7 @@ interface DivideAndConquerableConcurrent<OutputType>: DivideAndConquerable<Outpu
 
                 for (x in subcomponents.indices) {
                     waitList[x] = async(dispatcher) {
-                        intermediateResults.add(subcomponents[x]!!.divideAndConquer(dispatcher)) }
+                        intermediateResults.add(subcomponents[x].divideAndConquer(dispatcher)) }
                 }
                 waitList.forEach { it -> it.await() }
             }
@@ -54,18 +54,18 @@ interface DivideAndConquerableConcurrent<OutputType>: DivideAndConquerable<Outpu
         return recombine(intermediateResults)
     }
 
-    override fun decompose(): List<DivideAndConquerableConcurrent<Int>?>?
+    override fun decompose(): List<DivideAndConquerableConcurrent<OutputType>>
 }
 
 interface DivideAndConquerableMemory<OutputType>: DivideAndConquerable<OutputType> {
     fun divideAndConquer(memorized: IntArray): OutputType {
         if (this.isBasic) return baseFun()
-        val subcomponents: List<DivideAndConquerableMemory<Int>?>? = decompose()
-        val intermediateResults: MutableList<Int?> = ArrayList(
-            subcomponents!!.size
+        val subcomponents: List<DivideAndConquerableMemory<OutputType>> = decompose()
+        val intermediateResults: MutableList<OutputType> = ArrayList(
+            subcomponents.size
         )
 
-        subcomponents.forEach { subcomponent: DivideAndConquerableMemory<Int>? ->
+        subcomponents.forEach { subcomponent: DivideAndConquerableMemory<OutputType> ->
             intermediateResults.add(
                 memoryOrDefault(subcomponent, memorized)
             )
@@ -74,7 +74,7 @@ interface DivideAndConquerableMemory<OutputType>: DivideAndConquerable<OutputTyp
         return recombine(intermediateResults)
     }
 
-    fun memoryOrDefault(d: DivideAndConquerableMemory<Int>?, memory: IntArray): Int
+    fun memoryOrDefault(d: DivideAndConquerableMemory<OutputType>, memory: IntArray): OutputType
 
-    override fun decompose(): List<DivideAndConquerableMemory<Int>?>?
+    override fun decompose(): List<DivideAndConquerableMemory<OutputType>>
 }

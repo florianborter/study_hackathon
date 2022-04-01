@@ -20,12 +20,12 @@ class FibonacciConquer(private val fib: Int) : DivideAndConquerable<Int> {
         return fib
     }
 
-    override fun decompose(): List<DivideAndConquerable<Int>?> {
+    override fun decompose(): List<DivideAndConquerable<Int>> {
         return listOf(FibonacciConquer(fib-1), FibonacciConquer(fib-2))
     }
 
-    override fun recombine(intermediateResults: MutableList<Int?>): Int {
-        return intermediateResults[0]!! + intermediateResults[1]!!
+    override fun recombine(intermediateResults: MutableList<Int>): Int {
+        return intermediateResults[0] + intermediateResults[1]
     }
 
 }
@@ -38,12 +38,12 @@ class FibonacciConquerConcurrent(private val fib: Int) : DivideAndConquerableCon
         return fib
     }
 
-    override fun decompose(): List<DivideAndConquerableConcurrent<Int>?>? {
+    override fun decompose(): List<DivideAndConquerableConcurrent<Int>> {
         return listOf(FibonacciConquerConcurrent(fib-1), FibonacciConquerConcurrent(fib-2))
     }
 
-    override fun recombine(intermediateResults: MutableList<Int?>): Int {
-        return intermediateResults[0]!! + intermediateResults[1]!!
+    override fun recombine(intermediateResults: MutableList<Int>): Int {
+        return intermediateResults[0] + intermediateResults[1]
     }
 
 }
@@ -56,19 +56,19 @@ class FibonacciConquerMemory(private val fib: Int) : DivideAndConquerableMemory<
         return fib
     }
 
-    override fun decompose(): List<DivideAndConquerableMemory<Int>?>? {
+    override fun decompose(): List<DivideAndConquerableMemory<Int>> {
         return listOf(FibonacciConquerMemory(fib-2), FibonacciConquerMemory(fib-1))
     }
 
-    override fun recombine(intermediateResults: MutableList<Int?>): Int {
-        return intermediateResults[0]!! + intermediateResults[1]!!
+    override fun recombine(intermediateResults: MutableList<Int>): Int {
+        return intermediateResults[0] + intermediateResults[1]
     }
 
-    override fun memoryOrDefault(d: DivideAndConquerableMemory<Int>?, memory: IntArray): Int {
+    override fun memoryOrDefault(d: DivideAndConquerableMemory<Int>, memory: IntArray): Int {
         if (memory[fib] != 0) {
             return memory[fib]
         }
-        memory[fib] = d!!.divideAndConquer(memory)
+        memory[fib] = d.divideAndConquer(memory)
         return memory[fib]
     }
 
@@ -92,7 +92,7 @@ class ChartView : View("Fibonacci Chart") {
         val linechart = linechart("Chart for fib methods", CategoryAxis(), NumberAxis())
 
         val fibonacciMetricsStart = 5
-        val fibonacciMetricsEnd = 40
+        val fibonacciMetricsEnd = 30
         val fibonacciMetricsStep = 5
 
         val memoryFibonacciMetrics = XYChart.Series<String, Number>()
