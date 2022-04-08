@@ -2,13 +2,26 @@ package ch.bfh.kotlin.experiments.and.mergesort
 
 import ch.bfh.kotlin.experiments.and.DivideAndConquerable
 import ch.bfh.kotlin.experiments.and.DivideAndConquerableConcurrent
-import javafx.geometry.Pos
-import javafx.scene.chart.CategoryAxis
-import javafx.scene.chart.NumberAxis
-import javafx.scene.chart.XYChart
+import javafx.scene.Node
+import javafx.scene.Scene
+import javafx.scene.layout.StackPane
 import javafx.stage.Stage
 import kotlinx.coroutines.asCoroutineDispatcher
-import tornadofx.*
+import org.jfree.chart3d.Chart3D
+import org.jfree.chart3d.Chart3DFactory
+import org.jfree.chart3d.Orientation
+import org.jfree.chart3d.data.Range
+import org.jfree.chart3d.data.xyz.XYZSeries
+import org.jfree.chart3d.data.xyz.XYZSeriesCollection
+import org.jfree.chart3d.fx.Chart3DViewer
+import org.jfree.chart3d.graphics3d.Dimension3D
+import org.jfree.chart3d.legend.LegendAnchor
+import org.jfree.chart3d.plot.XYZPlot
+import org.jfree.chart3d.renderer.RainbowScale
+import org.jfree.chart3d.renderer.xyz.SurfaceRenderer
+import tornadofx.App
+import tornadofx.launch
+import java.awt.Color
 import java.util.concurrent.Executors
 
 class MergeSort(private val partialList: Array<Int>) : DivideAndConquerable<Array<Int>> {
@@ -122,74 +135,90 @@ fun main(args: Array<String>) {
     launch<Chart>(args)
 }
 
-class Chart : App(ChartView::class) {
+class Chart : App() {
     override fun start(stage: Stage) {
         stage.width = 500.0
         stage.height = 500.0
         super.start(stage)
+
+        val sp = StackPane()
+        sp.children.add(Companion.createDemoNode())
+        val scene = Scene(sp, 768.0, 512.0)
+        stage.scene = scene
+        stage.show()
     }
-}
 
-class ChartView : View("Mergesort Chart") {
-    override val root = vbox(20, alignment = Pos.CENTER)
-    init {
-        val linechart = linechart("Chart for mergesort methods", CategoryAxis(), NumberAxis())
-
-        val inputSize = 7000000
-        val nThreads = 30
-
-        val regularMergeSortMetrics = XYChart.Series<String, Number>()
-        val concurrentMergeSortMetrics = XYChart.Series<String, Number>()
-        val sortMetrics = XYChart.Series<String, Number>()
-
-        val avgArrayRegular = Array<Long>(100){0}
-        val avgArrayConcurrent = Array<Long>(100){0}
-        val avgArrayKotlinSort = Array<Long>(100){0}
-
-        regularMergeSortMetrics.name = "Mergesort"
-        concurrentMergeSortMetrics.name = "Concurrent Mergesort"
-        sortMetrics.name = "Sort"
-
-        for (i in 0 until 10 step 1) {
-            val input = Array<Int>(inputSize){(0..Int.MAX_VALUE).random()}
-
-            System.gc()
-            var startTime = System.nanoTime()
-            val dispatcher = Executors.newFixedThreadPool(nThreads).asCoroutineDispatcher()
-            MergeSortConcurrent(input).divideAndConquer(dispatcher)
-            var endTime = System.nanoTime()
-            concurrentMergeSortMetrics.data.add(XYChart.Data(i.toString(), (endTime-startTime) / 1000000))
-            avgArrayRegular[i] = (endTime-startTime) / 1000000
-            println("Concurrent mergesort done ($i)")
-
-            System.gc()
-            startTime = System.nanoTime()
-            MergeSort(input).divideAndConquer()
-            endTime = System.nanoTime()
-            regularMergeSortMetrics.data.add(XYChart.Data(i.toString(), (endTime-startTime) / 1000000))
-            avgArrayConcurrent[i] = (endTime-startTime) / 1000000
-            println("Mergesort done ($i)")
-
-            System.gc()
-            startTime = System.nanoTime()
-            input.sort()
-            endTime = System.nanoTime()
-            sortMetrics.data.add(XYChart.Data(i.toString(), (endTime-startTime) / 1000000))
-            avgArrayKotlinSort[i] = (endTime-startTime) / 1000000
-            println("Sort done ($i)")
-
+    companion object {
+        /**
+         * Creates and returns a node for the demo chart.
+         *
+         * @return A node for the demo chart.
+         */
+        fun createDemoNode(): Node {
+            val chart = createChart()
+            return Chart3DViewer(chart)
         }
 
-        linechart.data.add(regularMergeSortMetrics)
-        linechart.data.add(concurrentMergeSortMetrics)
-        linechart.data.add(sortMetrics)
+        /**
+         * Creates a surface chart for the demo.
+         *
+         * @return A surface chart.
+         */
+        private fun createChart(): Chart3D {
+            val inputSizeStart = 10000000
+            val inputSizeEnd = 100000000
+            val inputSizeStep = 100000000
+            val nThreadsStart = 2
+            val nThreadsEnd = 30
+            val nThreadsStep = 4
 
-        this.root.add(linechart)
+            val concurrentMergeSortMetrics = XYZSeriesCollection<String>()
 
-        this.root.add(label("Regular Mergesort avg: ${avgArrayConcurrent.average()}"))
-        this.root.add(label("Concurrent mergesort avg: ${avgArrayRegular.average()}"))
-        this.root.add(label("Kotlin ArraySort avg: ${avgArrayKotlinSort.average()}"))
-        this.root.add(label("Number of Threads : $nThreads"))
+            val metricsForNoThreads = XYZSeries("0")
+            for (inputSize in inputSizeStart until inputSizeEnd step inputSizeStep) {
+                val input = Array<Int>(inputSize) { (0..Int.MAX_VALUE).random() }
+
+                System.gc()
+                val startTime = System.nanoTime()
+
+                MergeSortConcurrent(input).divideAndConquer()
+
+                val endTime = System.nanoTime()
+                metricsForNoThreads.add(0.0, inputSize.toDouble(), ((endTime - startTime) / 1000000).toDouble())
+                println("Concurrent mergesort done (0, $inputSize)")
+            }
+            concurrentMergeSortMetrics.add(metricsForNoThreads)
+
+            for (nThreads in nThreadsStart until nThreadsEnd step nThreadsStep) {
+                val metricsForThreads = XYZSeries(nThreads.toString())
+
+                for (inputSize in inputSizeStart until inputSizeEnd step inputSizeStep) {
+                    val input = Array<Int>(inputSize) { (0..Int.MAX_VALUE).random() }
+
+                    System.gc()
+                    val startTime = System.nanoTime()
+
+                    val dispatcher = Executors.newFixedThreadPool(nThreads).asCoroutineDispatcher()
+                    MergeSortConcurrent(input).divideAndConquer(dispatcher, nThreads)
+
+                    val endTime = System.nanoTime()
+                    metricsForThreads.add(nThreads.toDouble(), inputSize.toDouble(), ((endTime - startTime) / 1000000).toDouble())
+                    println("Concurrent mergesort done ($nThreads, $inputSize)")
+                }
+                concurrentMergeSortMetrics.add(metricsForThreads)
+            }
+
+
+            val chart = Chart3DFactory.createXYZLineChart(
+                "XYZ Line Chart Demo",
+                "Orson Charts", concurrentMergeSortMetrics, "Threads", "InputSize", "Time"
+            )
+            chart.chartBoxColor = Color(255, 255, 255, 128)
+            val plot = chart.plot as XYZPlot
+            plot.dimensions = Dimension3D(100000.0, 100000.0, 100000.0)
+
+            return chart
+        }
     }
 }
 

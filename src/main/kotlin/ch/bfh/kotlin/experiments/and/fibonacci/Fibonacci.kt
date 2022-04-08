@@ -112,7 +112,7 @@ class ChartView : View("Fibonacci Chart") {
         for (i in fibonacciMetricsStart..fibonacciMetricsEnd step fibonacciMetricsStep) {
             val dispatcher = Executors.newFixedThreadPool(12).asCoroutineDispatcher()
             val startTime = System.nanoTime()
-            FibonacciConquerConcurrent(i).divideAndConquer(dispatcher)
+            FibonacciConquerConcurrent(i).divideAndConquer(dispatcher, 12)
             val endTime = System.nanoTime()
             threadedFibonacciMetrics.data.add(XYChart.Data(i.toString(), endTime-startTime))
             println("Threaded Fibonacci ($i) done")

@@ -29,16 +29,16 @@ interface DivideAndConquerable<OutputType> {
 }
 
 interface DivideAndConquerableConcurrent<OutputType>: DivideAndConquerable<OutputType> {
-    fun divideAndConquer(dispatcher: ExecutorCoroutineDispatcher): OutputType {
+    fun divideAndConquer(dispatcher: ExecutorCoroutineDispatcher, nThreads: Int): OutputType {
         if (this.isBasic) return baseFun()
         val subcomponents: List<DivideAndConquerableConcurrent<OutputType>> = decompose()
         val intermediateResults: MutableList<OutputType> = ArrayList(
             subcomponents.size
         )
 
-        if(Thread.activeCount() > 30) {
+        if(Thread.activeCount() > nThreads) {
             for (x in subcomponents) {
-                intermediateResults.add(x.divideAndConquer(dispatcher))
+                intermediateResults.add(x.divideAndConquer(dispatcher, nThreads))
             }
         } else {
             runBlocking {
@@ -46,7 +46,7 @@ interface DivideAndConquerableConcurrent<OutputType>: DivideAndConquerable<Outpu
 
                 for (x in subcomponents.indices) {
                     waitList[x] = async(dispatcher) {
-                        intermediateResults.add(subcomponents[x].divideAndConquer(dispatcher)) }
+                        intermediateResults.add(subcomponents[x].divideAndConquer(dispatcher, nThreads)) }
                 }
                 waitList.forEach { it -> it.await() }
             }
