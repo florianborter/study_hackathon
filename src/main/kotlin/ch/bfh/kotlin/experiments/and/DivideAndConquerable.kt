@@ -1,6 +1,10 @@
 package ch.bfh.kotlin.experiments.and
 
 import kotlinx.coroutines.*
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Future
+import java.util.concurrent.atomic.AtomicInteger
 
 // θ (2^n)
 interface DivideAndConquerable<OutputType> {
@@ -28,27 +32,34 @@ interface DivideAndConquerable<OutputType> {
     }
 }
 
+var nThreadslol: AtomicInteger = AtomicInteger(0)
+
 interface DivideAndConquerableConcurrent<OutputType>: DivideAndConquerable<OutputType> {
-    fun divideAndConquer(dispatcher: ExecutorCoroutineDispatcher, nThreads: Int): OutputType {
+    fun divideAndConquer(dispatcher: ExecutorService, nThreads: Int): OutputType {
         if (this.isBasic) return baseFun()
         val subcomponents: List<DivideAndConquerableConcurrent<OutputType>> = decompose()
         val intermediateResults: MutableList<OutputType> = ArrayList(
             subcomponents.size
         )
 
-        if(Thread.activeCount() > nThreads) {
-            for (x in subcomponents) {
+        for (x in subcomponents) {
+            if(nThreads == 0 || nThreadslol.get() >= nThreads) {
                 intermediateResults.add(x.divideAndConquer(dispatcher, nThreads))
-            }
-        } else {
-            runBlocking {
-                val waitList = Array<Deferred<Boolean>>(subcomponents.size){ CompletableDeferred(false) }
+            } else {
+                val futures = ArrayList<Future<OutputType>>()
+                for (x in subcomponents.indices) {
+                    val worker = Callable {
+                        nThreadslol.getAndIncrement()
+                        val res = subcomponents[x].divideAndConquer(dispatcher, nThreads)
+                        nThreadslol.getAndIncrement()
+                        res
+                    }
+                    futures.add(dispatcher.submit(worker))
+                }
 
                 for (x in subcomponents.indices) {
-                    waitList[x] = async(dispatcher) {
-                        intermediateResults.add(subcomponents[x].divideAndConquer(dispatcher, nThreads)) }
+                    intermediateResults.add(futures[x].get())
                 }
-                waitList.forEach { it -> it.await() }
             }
         }
         return recombine(intermediateResults)

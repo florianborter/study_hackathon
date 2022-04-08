@@ -167,15 +167,15 @@ class Chart : App() {
         private fun createChart(): Chart3D {
             val inputSizeStart = 10000000
             val inputSizeEnd = 100000000
-            val inputSizeStep = 100000000
-            val nThreadsStart = 2
-            val nThreadsEnd = 30
+            val inputSizeStep = 20000000
+            val nThreadsStart = 4
+            val nThreadsEnd = 32
             val nThreadsStep = 4
 
             val concurrentMergeSortMetrics = XYZSeriesCollection<String>()
 
             val metricsForNoThreads = XYZSeries("0")
-            for (inputSize in inputSizeStart until inputSizeEnd step inputSizeStep) {
+            for (inputSize in inputSizeStart .. inputSizeEnd step inputSizeStep) {
                 val input = Array<Int>(inputSize) { (0..Int.MAX_VALUE).random() }
 
                 System.gc()
@@ -189,19 +189,19 @@ class Chart : App() {
             }
             concurrentMergeSortMetrics.add(metricsForNoThreads)
 
-            for (nThreads in nThreadsStart until nThreadsEnd step nThreadsStep) {
+            for (nThreads in nThreadsStart .. nThreadsEnd step nThreadsStep) {
                 val metricsForThreads = XYZSeries(nThreads.toString())
 
-                for (inputSize in inputSizeStart until inputSizeEnd step inputSizeStep) {
+                for (inputSize in inputSizeStart .. inputSizeEnd step inputSizeStep) {
                     val input = Array<Int>(inputSize) { (0..Int.MAX_VALUE).random() }
 
                     System.gc()
                     val startTime = System.nanoTime()
 
-                    val dispatcher = Executors.newFixedThreadPool(nThreads).asCoroutineDispatcher()
+                    val dispatcher = Executors.newFixedThreadPool(nThreads)
                     MergeSortConcurrent(input).divideAndConquer(dispatcher, nThreads)
-
                     val endTime = System.nanoTime()
+                    dispatcher.shutdown()
                     metricsForThreads.add(nThreads.toDouble(), inputSize.toDouble(), ((endTime - startTime) / 1000000).toDouble())
                     println("Concurrent mergesort done ($nThreads, $inputSize)")
                 }
@@ -215,7 +215,7 @@ class Chart : App() {
             )
             chart.chartBoxColor = Color(255, 255, 255, 128)
             val plot = chart.plot as XYZPlot
-            plot.dimensions = Dimension3D(100000.0, 100000.0, 100000.0)
+            plot.dimensions = Dimension3D(10.0, 10.0, 10.0)
 
             return chart
         }

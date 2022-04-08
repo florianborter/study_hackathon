@@ -91,9 +91,9 @@ class ChartView : View("Fibonacci Chart") {
     init {
         val linechart = linechart("Chart for fib methods", CategoryAxis(), NumberAxis())
 
-        val fibonacciMetricsStart = 5
-        val fibonacciMetricsEnd = 30
-        val fibonacciMetricsStep = 5
+        val fibonacciMetricsStart = 4
+        val fibonacciMetricsEnd = 44
+        val fibonacciMetricsStep = 4
 
         val memoryFibonacciMetrics = XYChart.Series<String, Number>()
         memoryFibonacciMetrics.name = "Fibonacci with memory"
@@ -110,7 +110,7 @@ class ChartView : View("Fibonacci Chart") {
         val threadedFibonacciMetrics = XYChart.Series<String, Number>()
         threadedFibonacciMetrics.name = "Fibonacci with threads"
         for (i in fibonacciMetricsStart..fibonacciMetricsEnd step fibonacciMetricsStep) {
-            val dispatcher = Executors.newFixedThreadPool(12).asCoroutineDispatcher()
+            val dispatcher = Executors.newFixedThreadPool(12)
             val startTime = System.nanoTime()
             FibonacciConquerConcurrent(i).divideAndConquer(dispatcher, 12)
             val endTime = System.nanoTime()
