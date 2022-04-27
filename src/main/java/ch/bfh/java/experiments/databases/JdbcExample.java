@@ -10,7 +10,7 @@ public class JdbcExample {
         } catch (ClassNotFoundException e) {
             throw new Error("Cannot find JDBC Driver", e);
         }
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/main/resources/university.db")) {
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:./src/main/sql/setup/university.db")) {
             System.out.println("Connection established!");
             // Using the connection ...
             dosth(conn);
