@@ -125,6 +125,12 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.8.7</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core</artifactId>
+            <version>1.4.3</version>
+        </dependency>
     </dependencies>
 
     <build>
