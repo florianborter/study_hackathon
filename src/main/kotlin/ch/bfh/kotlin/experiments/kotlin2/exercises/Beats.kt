@@ -18,8 +18,10 @@ fun playSound(file: String) {
 suspend fun playBeat(beat: String, beatFile: String) {
     for (index in beat.indices) {
         if (beat.get(index) == 'x') {
-            run {
-                playSound(beatFile)
+            runBlocking {
+                launch(Dispatchers.Default) {
+                    playSound(beatFile)
+                }
             }
         }
         delay(100)
@@ -47,4 +49,6 @@ fun main() {
     beatFiles.add(dir + "crash_cymbal.aiff")
 
     playBeats(beats, beatFiles)
+
+    Thread.sleep(1000)
 }
