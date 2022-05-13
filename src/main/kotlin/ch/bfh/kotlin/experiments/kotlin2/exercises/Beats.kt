@@ -15,12 +15,12 @@ fun playSound(file: String) {
     clip.start()
 }
 
-suspend fun playBeat(beat: String, beatFile: String) {
-    for (index in beat.indices) {
-        if (beat.get(index) == 'x') {
+suspend fun playBeat(beat: Pair<String, String>) {
+    for (index in beat.first.indices) {
+        if (beat.first[index] == 'x') {
             runBlocking {
                 launch(Dispatchers.Default) {
-                    playSound(beatFile)
+                    playSound(beat.second)
                 }
             }
         }
@@ -28,11 +28,11 @@ suspend fun playBeat(beat: String, beatFile: String) {
     }
 }
 
-fun playBeats(beats: List<String>, beatFiles: List<String>) {
+fun playBeats(beats: List<Pair<String, String>>) {
     runBlocking {
-        for (index in beats.indices) {
+        for (beat in beats) {
             launch(Dispatchers.Default) {
-                playBeat(beats[index], beatFiles[index])
+                playBeat(beat)
             }
         }
     }
@@ -40,15 +40,11 @@ fun playBeats(beats: List<String>, beatFiles: List<String>) {
 
 fun main() {
     val dir = "src/main/resources/audio/"
-    val beats = mutableListOf<String>()
-    val beatFiles = mutableListOf<String>()
-    beats.add("x-x-x-x-x-x-x-x-x-")
-    beatFiles.add(dir + "toms.aiff")
+    val beatPairs = mutableListOf<Pair<String, String>>()
+    beatPairs.add(Pair("x-x-x-x-x-x-x-x-x-", dir + "toms.aiff"))
+    beatPairs.add(Pair("x-----x-----x-----", dir + "crash_cymbal.aiff"))
 
-    beats.add("x-----x-----x-----")
-    beatFiles.add(dir + "crash_cymbal.aiff")
-
-    playBeats(beats, beatFiles)
+    playBeats(beatPairs)
 
     Thread.sleep(1000)
 }
