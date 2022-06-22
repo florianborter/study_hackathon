@@ -2,12 +2,11 @@ package ch.bfh.kotlin.experiments.kotlin2.exercises.async
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.channels.produce
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.random.Random
 
 data class PizzaOrder(val orderNumber: Int, val waiter: String = "Default")
+
 val counter = AtomicInteger()
 
 /*fun CoroutineScope.takeOrder(name: String): ReceiveChannel<PizzaOrder> = produce{
