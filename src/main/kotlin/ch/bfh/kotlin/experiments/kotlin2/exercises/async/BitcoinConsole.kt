@@ -1,6 +1,5 @@
 package ch.bfh.kotlin.experiments.kotlin2.exercises.async
 
-import ch.bfh.kotlin.experiments.kotlin2.exercises.serialization.json.Geography
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +9,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.net.URL
-import java.nio.file.Paths
 
 const val url = "https://api.coindesk.com/v1/bpi/currentprice.json"
 
@@ -41,7 +39,7 @@ data class BitCoinData(
     val bpi: Bpi
 ) {
     override fun toString(): String {
-        return "Rates on ${time.updated}: ${bpi.EUR.rate_float} ${bpi.EUR.code}"+
+        return "Rates on ${time.updated}: ${bpi.EUR.rate_float} ${bpi.EUR.code}" +
                 ", ${bpi.GBP.rate_float} ${bpi.GBP.code}, ${bpi.USD.rate_float} ${bpi.USD.code}"
     }
 }
