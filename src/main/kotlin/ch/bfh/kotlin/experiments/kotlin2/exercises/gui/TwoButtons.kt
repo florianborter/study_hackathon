@@ -1,4 +1,4 @@
-package ch.bfh.kotlin.experiments.kotlin2.exercises
+package ch.bfh.kotlin.experiments.kotlin2.exercises.gui
 
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox

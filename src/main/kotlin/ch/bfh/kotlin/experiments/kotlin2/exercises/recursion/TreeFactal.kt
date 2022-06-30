@@ -1,4 +1,4 @@
-package ch.bfh.kotlin.experiments.kotlin2.exercises
+package ch.bfh.kotlin.experiments.kotlin2.exercises.recursion
 
 /** Programming 2 with Kotlin - FS 20/21,
  *  Computer Science, Bern University of Applied Sciences */
