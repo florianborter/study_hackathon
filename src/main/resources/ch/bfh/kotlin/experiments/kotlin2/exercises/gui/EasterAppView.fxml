@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<HBox prefHeight="700.0" prefWidth="700.0" stylesheets="@/easterapp.css" xmlns="http://javafx.com/javafx/11.0.2"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <VBox prefHeight="700.0" prefWidth="500.0">
+        <TableView fx:id="table">
+            <columns>
+                <TableColumn text="%day">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="day"></PropertyValueFactory>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="%arrival">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="arrival"></PropertyValueFactory>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="%number">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="number"></PropertyValueFactory>
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="%price">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="price"></PropertyValueFactory>
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+    </VBox>
+    <VBox prefHeight="700.0" prefWidth="200.0">
+        <HBox alignment="CENTER">
+            <ImageView fitWidth="200.0" preserveRatio="true">
+                <Image url="@/osterdings.png"></Image>
+            </ImageView>
+        </HBox>
+        <HBox alignment="CENTER">
+            <Label id="text" fx:id="textLabel" text="%description" wrapText="true"></Label>
+        </HBox>
+    </VBox>
+</HBox>
