@@ -1,4 +1,4 @@
-package ch.bfh.kotlin.experiments.kotlin2.pretest
+package ch.bfh.kotlin.experiments.kotlin2
 
 fun <T> merge(array1: Array<T>, array2: Array<T>): Array<T> {
     return array1 + array2
@@ -30,6 +30,6 @@ fun Cat.feed(nbm: Int) {
 }
 
 fun main() {
-    val myAnimals = listOf(Cat("Minka"), Cat("Fiffy"))
+    val myAnimals = listOf(Cat("Minka"), Dog("Fiffy"))
     for ((idx, a) in myAnimals.withIndex()) a.feed((idx+1)*2)
 }
