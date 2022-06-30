@@ -1,4 +1,4 @@
-package ch.bfh.kotlin.experiments.kotlin2.exercises.complexnumber
+package ch.bfh.kotlin.experiments.kotlin2.exercises.operatoroverloading
 
 
 /** Programming 2 with Kotlin - FS 19/20,
