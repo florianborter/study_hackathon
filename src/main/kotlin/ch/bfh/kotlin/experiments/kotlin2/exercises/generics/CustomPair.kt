@@ -6,7 +6,7 @@ open class CustomPair<S, T>(_first: S, _second: T) {
     var second = _second
         protected set
 
-    fun swapedPair() = CustomPair(second, first)
+    fun swappedPair() = CustomPair(second, first)
 
     override fun toString(): String {
         return "${this.javaClass}: First: $first, Second: $second"
