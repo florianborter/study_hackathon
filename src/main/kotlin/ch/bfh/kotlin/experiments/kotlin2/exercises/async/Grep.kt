@@ -1,4 +1,4 @@
-package ch.bfh.kotlin.experiments.kotlin2.exercises
+package ch.bfh.kotlin.experiments.kotlin2.exercises.async
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,7 +22,8 @@ fun grep(grepString: String, pathString: String) {
 }
 
 fun main() {
-    val dir = Path("src/main").toAbsolutePath()
+    // Example file
+    val dir = Path("src/main/kotlin/ch/bfh/kotlin/experiments/Playground.kt").toAbsolutePath()
     println(dir)
     grep("font", dir.toString())
 }
