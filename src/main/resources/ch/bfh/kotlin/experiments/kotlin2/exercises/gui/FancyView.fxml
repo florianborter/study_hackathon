@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Button?>
+<VBox id="background-pane" stylesheets="@/fancy.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
+    <BorderPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        <center>
+            <Label fx:id="label" id="text" alignment="CENTER" layoutY="130.0" text="My fancy TornadoFX Application" textAlignment="CENTER">
+                <font>
+                    <Font name="Arial Bold" size="20.0"/>
+                </font>
+            </Label>
+        </center>
+    </BorderPane>
+    <BorderPane HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+        <center>
+            <Button fx:id="button" id="button" text="Hide Reflection" onMouseClicked="#buttonClicked" />
+        </center>
+    </BorderPane>
+</VBox>

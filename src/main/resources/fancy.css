@@ -1,0 +1,14 @@
+#background-pane {
+    -fx-background-image: url("/flower-background.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+#text {
+    -fx-text-fill: linear-gradient(to bottom, white, gold, yellow);
+}
+
+#button {
+    -fx-background-color: linear-gradient(to right, yellow, gold, red);
+    -fx-background-radius: 10px;
+}
