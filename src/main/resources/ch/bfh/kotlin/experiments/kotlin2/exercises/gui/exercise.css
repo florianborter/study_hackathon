@@ -1,0 +1,27 @@
+#pane1 {
+	-fx-background-image: url("metal3.jpg"); 
+	}
+	
+#label1 {
+	-fx-text-alignment: center;
+	-fx-font-family: Western;
+	-fx-text-fill: linear-gradient(white, gold, orange); 
+	-fx-font-size: 30;
+	-fx-font-weight: bold;
+}
+
+.button {
+-fx-background-color: linear-gradient(to bottom right,white, gold, orange);
+-fx-background-radius: 10;
+-fx-background-insets: 0,1,2,3,0;
+-fx-text-fill: #654b00;
+-fx-font-weight: bold;
+-fx-font-size: 14px;
+-fx-padding: 5 10 5 10;
+}
+.button:hover {
+-fx-background-color: linear-gradient(to bottom right,gold, orange, red);
+}
+.button:pressed {
+-fx-background-color: linear-gradient(to bottom right, orange, red, firebrick);
+}
