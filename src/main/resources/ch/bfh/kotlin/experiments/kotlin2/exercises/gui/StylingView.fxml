@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox id="pane1" alignment="CENTER" spacing="50.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+   <children>
+      <Label fx:id="label1" text="My fancy TornadoFX Application">
+         <effect>
+            <Reflection />
+         </effect>
+         </Label>
+      <Button fx:id="button1" defaultButton="true" mnemonicParsing="false" onAction="#handleButton" text="Remove Reflection">
+         <effect>
+            <Reflection />
+         </effect>
+         </Button>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets bottom="30.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>

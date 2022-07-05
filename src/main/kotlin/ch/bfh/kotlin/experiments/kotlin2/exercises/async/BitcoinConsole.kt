@@ -44,16 +44,22 @@ data class BitCoinData(
     }
 }
 
-fun main() {
+
+fun getBitCoinData(): BitCoinData {
     val mapper = jacksonObjectMapper()
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    val json = URL(url).readText()
+    //println(json)
+    return mapper.readValue(json, BitCoinData::class.java)
+}
+
+fun main() {
     runBlocking {
         val channel = Channel<BitCoinData>(CONFLATED)
         launch(Dispatchers.Default) {
             while (true) {
                 println("Thread in Coroutine 1: " + Thread.currentThread().id)
-                val json = URL(url).readText()
-                val bitcoinData = mapper.readValue(json, BitCoinData::class.java)
+                val bitcoinData = getBitCoinData()
                 channel.send(bitcoinData)
                 delay(10000)
             }
