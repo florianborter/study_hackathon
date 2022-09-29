@@ -1,0 +1,22 @@
+ul {
+    background-color: #555555;
+}
+
+li a {
+    color: white;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    background-color: #111;
+}
+
+aside {
+    background-color: lightgray;
+}
+@media screen and (max-width: 450px) {
+    body {
+        background-color: lightblue;
+    }
+}
+
