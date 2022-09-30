@@ -26,6 +26,10 @@ body {
         text-decoration: none;
     }
 
+    main {
+        display: flow-root;
+    }
+
     #main-content {
         width: 70%;
         float: left;
@@ -40,7 +44,6 @@ body {
     }
 
     footer {
-        display: inline-block;
         width: 100%;
         height: 100%;
         background-color: red;
