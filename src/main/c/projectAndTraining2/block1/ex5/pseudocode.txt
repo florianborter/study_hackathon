@@ -1,0 +1,102 @@
+*******************************************************
+****** I made two implementations in Pseudo Code ******
+*******************************************************
+
+
+********************************
+***** First Implementation *****
+********************************
+Pseudo Classes:
+Graph(int _numberOfNodes, int _numberOfEdges) {
+    int numberOfNodes = _numberOfNodes;
+    int numberOfEdges = _numberOfEdges;
+
+    edges = new Edge[numberOfEdges]
+    initialize Array content
+}
+
+Edge {
+    int src;
+    int dst;
+}
+
+Pseudo Code:
+fun kruskalMst(Graph graph) {
+    val mst = Arraylist<Edges>()
+    val binaryHeap = createBinaryHeap(graph.getEdges())
+    while(binaryHeap.hasElements()) {
+        val currentEdge = binaryHeap.extractMin()
+
+        if(!formsCycle(mst, currentEdge)) {
+            mst.add(currentEdge)
+        }
+    }
+}
+
+fun isCycle(Graph graph): boolean {
+    int parent[] == createArray with size of numberOfNodes and initalize with a unique increasing number
+
+    for(int i in graph.numberOfEdges) {
+        int x = graph.find(parent, graph.edge[i].src);
+        int y = graph.find(parent, graph.edge[i].src);
+
+        if x == y return true
+
+        graph.Union(parent, x, y)
+    }
+    return false
+}
+
+fun find(int parent[], int i): Int {
+    check if parent[i] and i have the same group-number
+
+    if yes: return the "group-number"
+
+    return find(parent, parent[i]); //this is used to go through multiple depth-levels
+}
+
+void Union(int parent[], int y, int y) {
+    parent[x] = y //putting them in the same group
+}
+
+
+
+
+*************************************
+******** Second implementation ******
+*************************************
+
+Pseudo Classes:
+Node(ID: Int)
+Edge(weight: Int, node1: Node, node2: Node)
+
+Pseudo Code:
+kruskalMst(edges: Array<Edge>) {
+    val mst = Arraylist<Edges>()
+    val binaryHeap = createBinaryHeap(edges)
+    while(binaryHeap.hasElements()) {
+        val currentEdge = binaryHeap.extractMin()
+
+        if(!formsCycle(mst, currentEdge)) {
+            mst.add(currentEdge)
+        }
+    }
+}
+
+fun formsCycle(currentTree: Arraylist<Edge>, edgeToAdd: Edge): Boolean { //using Union Find
+    val parent = HashSet<Pair<Node, Int>>() //holds all Nodes and the group they belong to (as Int, initially using their ID)
+    parent.add(AllNodesFromCurrentTree)
+
+    iterateThroughEdgesInCurrentTree {
+        if(edge.getNodes() belong to same group) {
+            return true //cycle detected
+        } else {
+            union them
+        }
+    }
+
+    val nodesFromEdgeToAdd = edgeToAdd.getNodes()
+    val nodes = parent.getNodes(nodesFromEdgeToAdd)
+
+    return nodes(0).group == nodes(1).group
+}
