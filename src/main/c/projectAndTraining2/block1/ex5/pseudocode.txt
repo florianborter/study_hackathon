@@ -27,7 +27,7 @@ fun kruskalMst(Graph graph) {
     while(binaryHeap.hasElements()) {
         val currentEdge = binaryHeap.extractMin()
 
-        if(!formsCycle(mst, currentEdge)) {
+        if(!isCycle(mst and currentEdge)) {
             mst.add(currentEdge)
         }
     }
