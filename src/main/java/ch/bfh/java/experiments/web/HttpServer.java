@@ -37,15 +37,17 @@ public class HttpServer {
                     File file = new File("src\\main\\resources\\web" + requestLine[1]);
                     if (!file.exists()) {
                         error404Response(writer);
-                        continue;
                     } else {
                         if (file.isFile()) {
-                            System.out.println("it is a file");
                             okResponse(writer, outputStream, file);
                         }
                         if (file.isDirectory()) {
-                            System.out.println("it is a dir");
-                            File possibleIndexFile = new File(file.getPath() + "/index.html");
+                            String newPath = "src\\main\\resources\\web" + requestLine[1].replace("/", "\\");
+                            if (!newPath.endsWith("\\")) {
+                                newPath += "\\";
+                            }
+                            newPath += "index.html";
+                            File possibleIndexFile = new File(newPath);
                             if (possibleIndexFile.exists()) {
                                 okResponse(writer, outputStream, file);
                             } else {
@@ -54,10 +56,6 @@ public class HttpServer {
                         }
                     }
                 }
-				/*writer.println("HTTP/1.0 200 OK");
-				writer.println();
-				writer.println("<h1>Hello World!</h1>");
-				writer.println(new Date());*/
             } finally {
                 socket.close();
             }
@@ -89,6 +87,7 @@ public class HttpServer {
                 }
             } catch (IOException e) {
                 System.out.println("Error occured: " + e.getMessage());
+                e.printStackTrace();
             }
 
         }
