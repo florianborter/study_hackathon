@@ -40,9 +40,19 @@ int backpack(int values[], int weights[], int capacity, int n, int **calculatedV
 int main(void)
 {
     int capacity = 16;
-    int values[] = {6, 3, 5, 4, 4, 2};
+    int values[] = {6, 3, 5, 4, 5, 2};
     int weights[] = {2, 3, 7, 4, 4, 2};
     int n = sizeof(values) / sizeof(values[0]);
-    printf("%d\n", backpack(values, weights, capacity, n - 1, generateTable(n, capacity)));
+    int** table = generateTable(n, capacity);
+    printf("the result is %d\n", backpack(values, weights, capacity, n - 1, table));
+    
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j <= capacity; j++)
+        {
+            printf("\t[%d]", table[i][j]);
+        }
+        printf("\n");
+    }
     return 0;
 }

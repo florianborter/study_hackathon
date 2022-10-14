@@ -1,0 +1,16 @@
+Als Challenge für mich habe ich die Aufgabe in c programmiert. Die Lösung ist 20 mit den gegebenen Daten.
+Hier meine vollständige Tabelle fürs dynamic programming:
+
+[0]     [0]     [6]     [6]     [6]     [6]     [6]     [6]     [6]     [6]     [6]     [6]     [6]     [6]     [6]     [-1]    [6]
+[-1]    [0]     [-1]    [6]     [-1]    [9]     [9]     [9]     [9]     [9]     [9]     [-1]    [9]     [-1]    [9]     [-1]    [9]
+[-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [9]     [-1]    [9]     [-1]    [11]    [-1]    [14]    [-1]    [14]    [-1]    [14]
+[-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [13]    [-1]    [14]    [-1]    [15]    [-1]    [18]
+[-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [18]    [-1]    [19]
+[-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [-1]    [20]
+
+Komplexitätsanalyse:
+Zeitkomplexität:
+    Das erstellen der Tabelle ist bereits ∑(0 bis n-1)∑(0 bis C) => O(n*C)
+    Die Hauptfunktion backpack muss im schlimmsten Fall die ganze Tabelle füllen => O(n*C) 
+Speicherkomplexität:
+    Verwendung eines 2D Arrays mit Grösse n * C. => O(n * C)
