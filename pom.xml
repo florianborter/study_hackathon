@@ -8,6 +8,7 @@
     <artifactId>kotlin_examples</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
+    <!--<packaging>war</packaging>--> <!--Use This when doing web-dev with war-package-->
 
     <properties>
         <kotlin.version>1.5.31</kotlin.version>
@@ -142,6 +143,12 @@
             <artifactId>junit-jupiter</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
         </dependency>
     </dependencies>
 
