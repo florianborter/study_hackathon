@@ -1,0 +1,138 @@
+*******************************
+***** Complexity Analysis *****
+*******************************
+The Complexity Analysis will be performed on the first implementation of the Algorithm in Pseudo-Code
+
+***************************
+***** Time Complexity *****
+***************************
+
+
+Priority Queue implementation: Binary Heap.
+Insertion: O(log n) Find-min: O(1) extract-min: O(log n)
+
+
+Graph(int _numberOfNodes, int _numberOfEdges) {                                                             // -> O(n)
+    int numberOfNodes = _numberOfNodes;                                                                     //O(1)
+    int numberOfEdges = _numberOfEdges;                                                                     //O(1)
+
+    edges = new Edge[numberOfEdges]                                                                         //O(1)
+    initialize Array content                                                                                //O(n)
+}
+
+Edge {                                                                                                      // -> O(1)
+    int src;                                                                                                //O(1)
+    int dst;                                                                                                //O(1)
+}
+
+Pseudo Code:
+fun kruskalMst(Graph graph) {                                                                               // -> n^2
+    val mst = Arraylist<Edges>()                                                                            //O(1)
+    val binaryHeap = createBinaryHeap(graph.getEdges())                                                     //O(n * log n), see heap-creation
+    while(binaryHeap.hasElements()) {                                                                       //O(n^2) -> n * n = n^2 (see line 31)
+        val currentEdge = binaryHeap.extractMin()                                                           //O(1)
+
+        if(!formsCycle(mst and currentEdge)) {                                                              //O(n) (see line 37)
+            mst.add(currentEdge)                                                                            //O(1)
+        }
+    }
+}
+
+fun isCycle(Graph graph): boolean {                                                                         // -> O(n), n + 2n = 3n -> n
+    int parent[] == createArray with size of numberOfNodes and initalize with a unique increasing number    //O(n)
+
+    for(int i in graph.numberOfEdges) {                                                                     //O(1), fixed number of edges, clear from beginning
+        int x = graph.find(parent, graph.edge[i].src);                                                      //O(n) (line 51)
+        int y = graph.find(parent, graph.edge[i].src);                                                      //O(n) (line 51)
+
+        if x == y return true                                                                               //O(1)
+
+        graph.Union(parent, x, y)                                                                           //O(1)
+    }
+    return false                                                                                            //O(1)
+}
+
+fun find(int parent[], int i): Int {                                                                        // -> O(n)
+    check if parent[i] and i have the same group-number                                                     //O(1)
+
+    if yes: return the "group-number"                                                                       //O(1)
+
+    return find(parent, parent[i]); //this is used to go through multiple depth-levels                      //O(n)
+}
+
+void Union(int parent[], int y, int y) {                                                                    //-> O(1)
+    parent[x] = y //putting them in the same group                                                          //O(1)
+}
+
+*********************************************
+***** my overall time-complexity is n^2 *****
+*********************************************
+
+
+
+
+
+
+
+****************************
+***** Space Complexity *****
+****************************
+Priority Queue implementation: Binary Heap.
+Insertion: O(log n) Find-min: O(1) extract-min: O(log n)
+
+
+Graph(int _numberOfNodes, int _numberOfEdges) {                                                             //O(n)
+    int numberOfNodes = _numberOfNodes;                                                                     //O(1)
+    int numberOfEdges = _numberOfEdges;                                                                     //O(1)
+
+    edges = new Edge[numberOfEdges]                                                                         //O(n)
+    initialize Array content                                                                                //O(1)
+}
+
+Edge {
+    int src;                                                                                                //O(1)
+    int dst;                                                                                                //O(1)
+}
+
+Pseudo Code:
+fun kruskalMst(Graph graph) {                                                                               // -> O(n^2)
+    val mst = Arraylist<Edges>()                                                                            //O(n)
+    val binaryHeap = createBinaryHeap(graph.getEdges())                                                     //O(n)
+    while(binaryHeap.hasElements()) {                                                                       //n times line 104 -> n^2
+        val currentEdge = binaryHeap.extractMin()                                                           //O(1) just an Edge
+
+        if(!isCycle(mst and currentEdge)) {                                                                 //O(n), see line 110
+            mst.add(currentEdge)
+        }
+    }
+}
+
+fun isCycle(Graph graph): boolean {                                                                         // -> O(n)
+    int parent[] == createArray with size of numberOfNodes and initalize with a unique increasing number    //O(n) depending on the number of nodes
+
+    for(int i in graph.numberOfEdges) {                                                                     //O(1) just an Int
+        int x = graph.find(parent, graph.edge[i].src);                                                      //O(1) just a int
+        int y = graph.find(parent, graph.edge[i].src);                                                      //O(1) just a int
+
+        if x == y return true
+
+        graph.Union(parent, x, y)
+    }
+    return false
+}
+
+fun find(int parent[], int i): Int {                                                                        //O(1) no new allocation happens
+    check if parent[i] and i have the same group-number
+
+    if yes: return the "group-number"
+
+    return find(parent, parent[i]); //this is used to go through multiple depth-levels
+}
+
+void Union(int parent[], int y, int y) {                                                                    //O(1) no new allocation happens
+    parent[x] = y //putting them in the same group
+}
+
+**********************************************
+***** my overall space-complexity is n^2 *****
+**********************************************
