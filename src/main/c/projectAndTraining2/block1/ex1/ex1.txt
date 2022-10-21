@@ -1,0 +1,31 @@
+# Algorithmen und Datenstrukturen
+
+Die Aufgabenbeschreibung befindet sich auf der Moodle Site zu diesem Modul (https://moodle.bfh.ch/course/view.php?id=32026, Block 1: Algorithmen – Aufgabe).
+
+Für allf. Fragen wenden Sie sich bitte an Herrn Eckerle (juergen.eckerle@bfh.ch).
+
+
+# Lösung
+Die Aufgabe wurde in C anstatt Pseudocode gelöst.
+
+# Komplexitätsanalyse
+Leider wird bei diesem Algorithmus der Input nicht geteilt, daher ist das Master-Theorem nicht awendbar.
+
+## Rekursiv - naiv
+Im besten Fall hat mindestens ein Wort die Länge 0 und die Funktion kann auf den Zeilen 29 oder 34 returnieren. Dann haben wir eine konstante Zeitkomplexität.
+
+Wenn die Wörter gleich sind, dann wird jeweils auf der Zeile 55 returniert, beide Inputs um 1 verkleinert bis beide Wörter durchgegangen sind. Also lineare Zeitkomplexität des Wortes (O(n) oder O(m), wobei m und n gleich sind.).
+
+In schlimmsten Fall sind die Wörter komplett unterschiedlich ("AAAAAA" und "BBBBBB"). Dann wird die Funktion 3 mal rekursiv aufgerufen, wobei der Input 2 mal um 1 (je ein Wort um 1 kürzer) und einmal um 2 (beide Wörter um 1 kürzer) kleiner wird.
+Die ungefähre Zeitkomplexität, die daraus resultiert wäre O(3^(m+n)) wobei m und n die Längen der Wörter sind. Da der Input einmal "doppelt" kürzer wird, ist die genaue Zeitkomplexität etwas besser.
+
+## Rekursiv - dynamic programming
+Mit dem Zwischenspeichern der einzelnen Resultate für die Positionen der einzelnen Wörter wird im schlimmsten Fall jede Möglichkeit der einzelnen Positionen gespeicher (m * n).
+Sobald dies getan ist, kann die Funktion alle Resultate von dieser Tabelle nehmen und benötigt keine rekursiven Aufrufe mehr.
+
+Also ist der schlimmste Fall der Zeitkomplexität O(n+m)  wobei m und n die Längen der Wörter sind.
+
+Da wir auch alle diese Resultate zwischenspeichern, ist die Speicherkomplexität auch O(n+m)
+
+
+
