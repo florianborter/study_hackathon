@@ -12,13 +12,7 @@ const val PASSWORDS_FILENAME = "/blockweek/xato-net-10-million-passwords.txt"
 const val HASHES_FILENAME = "/blockweek/out.txt"
 
 class ChildActor(context: ActorContext<Message>) : AbstractBehavior<Message>(context) {
-    var offset = 0
-    var size = 0
     lateinit var rootActorRef: ActorRef<Message>
-
-    fun setup(message: Message): ChildActor {
-        return this
-    }
 
     override fun createReceive(): Receive<Message> {
         return newReceiveBuilder()
@@ -33,7 +27,7 @@ class ChildActor(context: ActorContext<Message>) : AbstractBehavior<Message>(con
 
         for (pw in passwords) {
             for (hash in myHashes) {
-                val hashedPw = DecryptPasswords.hash("sha-512", pw + hash.salt)
+                val hashedPw = DecryptPasswords.hash("SHA-512", pw + hash.salt)
                 if (hash.hash == hashedPw) {
                     rootActorRef.tell(ReportCrackSuccess(username = hash.user, password = pw))
                 }
