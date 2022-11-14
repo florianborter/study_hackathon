@@ -9,16 +9,39 @@ import akka.actor.typed.javadsl.AbstractBehavior
 import akka.actor.typed.javadsl.ActorContext
 import akka.actor.typed.javadsl.Behaviors
 import akka.actor.typed.javadsl.Receive
+import java.io.FileReader
 
-class RootActor(context: ActorContext<Message>): AbstractBehavior<Message>(context) {
+class RootActor(context: ActorContext<Message>) : AbstractBehavior<Message>(context) {
     override fun createReceive(): Receive<Message> {
-        return newReceiveBuilder().onMessage(InitCrackMessage::class.java, this::initCracking).build()
+        return newReceiveBuilder()
+            .onMessage(InitCrackMessage::class.java, this::initCracking)
+            .onMessage(ReportCrackSuccess::class.java, this::crackSuccess)
+            .build()
     }
 
     private fun initCracking(message: InitCrackMessage): Behavior<Message> {
         val child = ChildActor.create()
-        val childActor = context.spawn(child, "Child", Props.empty())
-        childActor.tell(StartCrackMessage(0, 100, context.self))
+
+        val inFile = FileReader(ChildActor::class.java.getResource(HASHES_FILENAME)?.path ?: "")
+        val numberOfLines = inFile.readLines().size
+
+        val actorNumber = 8
+        val size = numberOfLines/actorNumber
+
+        for (i in 0 until actorNumber) {
+            val childActor = context.spawn(child, "Child$i", Props.empty())
+            if (i == actorNumber -1) {
+                childActor.tell(StartCrackMessage(i * size, numberOfLines - (i * size), context.self))
+            } else {
+                childActor.tell(StartCrackMessage(i * size, size, context.self))
+            }
+        }
+
+        return this
+    }
+
+    private fun crackSuccess(message: ReportCrackSuccess): Behavior<Message> {
+        println("Found username: ${message.username} with password: ${message.password}")
         return this
     }
 
@@ -31,7 +54,7 @@ class RootActor(context: ActorContext<Message>): AbstractBehavior<Message>(conte
          */
         @JvmStatic
         fun create(): Behavior<Message> {
-            return Behaviors.setup{ RootActor(it) }
+            return Behaviors.setup { RootActor(it) }
         }
     }
 
