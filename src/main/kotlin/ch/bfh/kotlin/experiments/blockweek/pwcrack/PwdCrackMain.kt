@@ -10,6 +10,8 @@ object PwdCrackMain {
 
 	 @JvmStatic
 	fun main(args: Array<String>) {
-		println("PwdCrack Exercise");
+		 println("PwdCrack Exercise")
+		 val rootActorSystem = ActorSystem.create(RootActor.create(), "RootActorSystem")
+		 rootActorSystem.tell(InitCrackMessage())
 	}
 }
