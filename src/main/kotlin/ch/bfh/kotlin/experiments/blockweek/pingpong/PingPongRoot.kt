@@ -51,9 +51,9 @@ class PingPongRoot(context: ActorContext<Command>): MutableBehaviorKT<Command>(c
         println(Messages.INIT)
         val pingActor = context.system.systemActorOf(ping, "Ping", Props.empty())
         val pongActor = context.system.systemActorOf(pong, "Pong", Props.empty())
-        pingActor.tell
-        pong.setup()
-        ping.start()
+        pingActor.tell(InitMessage(pongActor))
+        pongActor.tell(InitMessage(pingActor))
+        pingActor.tell(Messages.PONG)
         return this
     }
 

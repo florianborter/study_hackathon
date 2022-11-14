@@ -33,7 +33,7 @@ class Pong(context: ActorContext<Command>): MutableBehaviorKT<Command>(context)
     /**
      * The reference to ping we remember, once received from PingPongRoot.
      */
-
+    lateinit var ping: ActorRef<Command>
 
     /**
      * The common abstraction of all messages for this actor.
@@ -55,8 +55,10 @@ class Pong(context: ActorContext<Command>): MutableBehaviorKT<Command>(context)
      *
      * @return an instance of this actor
      */
-    fun setup() {
-        TODO("implement")
+    fun setup(message: InitMessage): Pong {
+        println("received2")
+        ping = message.replyTo
+        return this
     }
 
 
@@ -70,10 +72,11 @@ class Pong(context: ActorContext<Command>): MutableBehaviorKT<Command>(context)
 
 //TBD: notwendig?
     override fun createReceive(): Receive<Command> {
-        return newReceiveBuilder().onMessageEquals(Messages.PING, this::sendPong).build()
+        return newReceiveBuilder()
+            .onMessageEquals(Messages.PING, this::sendPong)
+            .onMessage(InitMessage::class.java, this::setup)
+            .build()
     }
-
-
 
     //DAFUQQQ
     override fun onMessage(msg: Command): Behavior<Command> {
@@ -87,7 +90,9 @@ class Pong(context: ActorContext<Command>): MutableBehaviorKT<Command>(context)
      */
     private fun sendPong(): Behavior<Command> {
         //TODO: Send PING
-        println("blub")
+        println("pong")
+        Thread.sleep(sleepTime.toLong())
+        this.ping.tell(Messages.PONG)
         return this
     }
 

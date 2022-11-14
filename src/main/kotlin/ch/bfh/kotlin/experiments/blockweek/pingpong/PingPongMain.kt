@@ -32,9 +32,5 @@ object PingPongMain {
         val system = ActorSystem.create(PingPongRoot.setup(), "PingPongSystem")
 
         system.tell(Messages.INIT)
-        system.tell(Messages.PING)
-        system.tell(Messages.PONG)
-
-        system.terminate()
     }
 }

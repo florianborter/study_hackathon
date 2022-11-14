@@ -9,6 +9,8 @@ import akka.actor.typed.Behavior
 import akka.actor.typed.javadsl.ActorContext
 import akka.actor.typed.javadsl.Behaviors
 import akka.actor.typed.javadsl.Receive
+import kotlin.concurrent.thread
+import kotlin.reflect.typeOf
 
 /**
  * A simple actor having the 'ping' role. It receives the initialization message
@@ -71,8 +73,9 @@ class Ping(context: ActorContext<Command>): MutableBehaviorKT<Command>(context)
      * @param setupMessage message that contains the reference to pong
      * @return ourselves
      */
-    fun setup(setupMessage: ActorRef<Command>): Ping {
-        pong = setupMessage
+    fun setup(setupMessage: InitMessage): Ping {
+        println("received")
+        pong = setupMessage.replyTo
         return this
     }
 
@@ -90,7 +93,10 @@ class Ping(context: ActorContext<Command>): MutableBehaviorKT<Command>(context)
      * @return ourselves
      */
     override fun createReceive(): Receive<Command> {
-        return newReceiveBuilder().onMessageEquals(Messages.PONG, this::sendPing).build()
+        return newReceiveBuilder()
+            .onMessageEquals(Messages.PONG, this::sendPing)
+            .onMessage(InitMessage::class.java, this::setup)
+            .build()
     }
 
     /**
@@ -100,7 +106,9 @@ class Ping(context: ActorContext<Command>): MutableBehaviorKT<Command>(context)
      */
     private fun sendPing(): Behavior<Command> {
         //TODO: Send PING
-        println("gugus")
+        println("ping")
+        Thread.sleep(sleepTime.toLong())
+        this.pong.tell(Messages.PING)
         return this
     }
 
