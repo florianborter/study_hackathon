@@ -5,30 +5,29 @@ import kotlin.math.pow
 
 
 fun main() {
-    squareAndMultiply(BigInteger.valueOf(145), BigInteger.valueOf(69), BigInteger.valueOf(667))
-
-
     val p1: BigInteger = BigInteger.valueOf(9679)
     val q1: BigInteger = BigInteger.valueOf(31393)
     val e1 = 5 //this is the Public Key
     val message1 = "revealing"
     val n1: BigInteger = p1 * q1
     val phiN1 = (p1 - BigInteger.valueOf(1)) * (q1 - BigInteger.valueOf(1))
-    val d1 = BigInteger.valueOf(243049421) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
+//    val d1 = BigInteger.valueOf(243049421)
+    val d1 = modInverse(e1.toBigInteger(), phiN1) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
 
     val encrypted1 = encrypt(e1, n1, message1)
     val decrypted1 = decrypt(d1, n1, encrypted1)
     println(decrypted1)
 
 
-
     val p2: BigInteger = BigInteger.valueOf(19319)
     val q2: BigInteger = BigInteger.valueOf(40153)
     val e2 = 5 //this is the Public Key
-    val message2 = "5706795    37360752    33554432   11293606    37360752    15327307    82411494     9936269     3680043    5802786    72953378    52490519   37360752"
+    val message2 =
+        "5706795    37360752    33554432   11293606    37360752    15327307    82411494     9936269     3680043    5802786    72953378    52490519   37360752"
     val n2: BigInteger = p2 * q2
     val phiN2 = (p2 - BigInteger.valueOf(1)) * (q2 - BigInteger.valueOf(1))
-    val d2 = BigInteger.valueOf(620525069) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
+//    val d2 = BigInteger.valueOf(620525069)
+    val d2 = modInverse(e2.toBigInteger(), phiN2) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
 
     val encrypted2 = encrypt(e2, n2, message2)
     val decrypted2 = decrypt(d2, n2, encrypted2)
@@ -106,7 +105,19 @@ fun squareAndMultiply(base: BigInteger, exponent: BigInteger, module: BigInteger
     return res
 }
 
+//Calculates the modular inverse
+fun modInverse(a: BigInteger, m: BigInteger): BigInteger {
+    val range = BigInteger.ONE.rangeTo(m)
+    for (x in 1 until m.toInt()) {
+        val tmp = x.toBigInteger()
+        if (a % m * (tmp % m) % m == BigInteger.ONE) {
+            return tmp
+        }
+    }
+    return BigInteger.ONE
+}
+
 /**
- *
+ * TODO: Explanation why rsa
  *
  */
