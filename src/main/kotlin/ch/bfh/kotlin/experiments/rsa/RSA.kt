@@ -1,11 +1,14 @@
 package ch.bfh.kotlin.experiments.rsa
 
 import kotlin.math.pow
+import kotlin.math.sqrt
 
 /*
 Excercise A:  111416463    179103703    88614043    179103703    79460541    108344112    996051    899109    46332557
-Excercise B: doesn't work, see email to Daniel Tokarev. Works with other Data
-* */
+Excercise B: doesn't work, see email to Daniel Tokarev. Works with other Data e.g. Student Secret Number = 4381: secure
+Excercise C: See crack method
+Excercise D: See Bottom of File
+*/
 
 fun main() {
     val p1: ULong = 9679u
@@ -29,6 +32,7 @@ fun main() {
     val n2: ULong = p2 * q2
     val phiN2 = (p2 - 1u) * (q2 - 1u)
 
+    //Something with this data is wrong
     val message2 = listOf<ULong>(
         5706795u,
         37360752u,
@@ -45,11 +49,27 @@ fun main() {
         37360752u
     )
 //    val d2: ULong = 620525069u
-    val d2 = modInverse(e2, phiN2) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
+    /*val d2 = modInverse(e2, phiN2) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
 
     val decrypted2 = decrypt(d2, n2, message2)
-    println(decrypted2)
+    println(decrypted2)*/
 
+    //***********************************************************************************************//
+    // The following Data is used from another line in the excel (Student Secret Number = 4381)
+    //***********************************************************************************************//
+    val p3: ULong = 25253u
+    val q3: ULong = 859u
+    val e3: ULong = 5u //this is the Public Key
+    val n3: ULong = p3 * q3
+    val phiN3 = (p3 - 1u) * (q3 - 1u)
+
+    val message3 = listOf<ULong>(4784746u, 11014233u, 8661273u, 15230087u, 13051775u, 11014233u)
+    val d3 = modInverse(e3, phiN3) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
+
+    val decrypted3 = decrypt(d3, n3, message3)
+    println(decrypted3)
+
+    crack(n2, e2, message2)
 }
 
 // c = m^e mod n, Pro Buchstabe gibt die methode ein Resultat in der ArryList zurück, resultate sind c1, c2, ... , cn
@@ -135,10 +155,22 @@ fun modInverse(a: ULong, m: ULong): ULong {
 }
 
 
-/*fun crack(n: Int): Pair<Int, Int> {
-    val near = sqrt(n)
+fun crack(n: ULong, e: ULong, message: List<ULong>) {
+    val near = sqrt(n.toDouble()).toULong()
+    var p = near
+    var q = near
 
-}*/
+    var res = ""
+    while (res == "") {
+        //try {
+        val phiN = (p - 1u) * (q - 1u)
+        val d = modInverse(e, phiN) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
+        res = decrypt(d, n, message)
+        //} catch (Ex)
+
+    }
+
+}
 
 /**
  * TODO: Explanation why rsa
