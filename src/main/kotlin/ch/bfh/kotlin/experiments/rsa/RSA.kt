@@ -69,7 +69,12 @@ fun main() {
     val decrypted3 = decrypt(d3, n3, message3)
     println(decrypted3)
 
-    crack(n2, e2, message2)
+
+    println("Let's get crackin'")
+    val crackE: ULong = 3u
+    val crackN: ULong = 15u
+    val crackMsg = encrypt(crackE, crackN, "ab")
+    crack(crackN, crackE, crackMsg)
 }
 
 // c = m^e mod n, Pro Buchstabe gibt die methode ein Resultat in der ArryList zurück, resultate sind c1, c2, ... , cn
@@ -157,19 +162,38 @@ fun modInverse(a: ULong, m: ULong): ULong {
 
 fun crack(n: ULong, e: ULong, message: List<ULong>) {
     val near = sqrt(n.toDouble()).toULong()
-    var p = near
-    var q = near
+    val primes = primes(n)
+    val nextPrimes = primes.filter { it >= near }
+    val previousPrimes = primes.filter { it <= near }
 
-    var res = ""
-    while (res == "") {
-        //try {
-        val phiN = (p - 1u) * (q - 1u)
-        val d = modInverse(e, phiN) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
-        res = decrypt(d, n, message)
-        //} catch (Ex)
+    for (i in nextPrimes.indices) {
+        val p = primes[i]
 
+        for (j in previousPrimes.indices.reversed()) {
+            val q = primes[j]
+            println("p: $p q: $q")
+            val phiN = (p - 1u) * (q - 1u)
+            val d = modInverse(e, phiN)
+            if (decrypt(d, n, message) == "ab") {
+                println("cracked :D p: $p, q: $q")
+            }
+        }
     }
+}
 
+//Primes until n
+fun primes(n: ULong): MutableList<ULong> {
+    val li: MutableList<ULong> = mutableListOf(2u)
+    val zero: ULong = 0u
+    val from: ULong = 2u
+    for (num in from..n + 1u) {
+        for (i in from..num) {
+            if (num % i == zero) {
+                if (num == i) li.add(num) else break
+            }
+        }
+    }
+    return li
 }
 
 /**
