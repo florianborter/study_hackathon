@@ -6,7 +6,7 @@ import kotlin.math.sqrt
 /*
 Excercise A:  111416463    179103703    88614043    179103703    79460541    108344112    996051    899109    46332557
 Excercise B: doesn't work, see email to Daniel Tokarev. Works with other Data e.g. Student Secret Number = 4381: secure
-Excercise C: See crack method
+Excercise C: See crack method (Data wrong as well, used data from B)
 Excercise D: See Bottom of File
 */
 
@@ -70,11 +70,30 @@ fun main() {
     println(decrypted3)
 
 
+    //The parameters for part c are also wrong, so using other parameters from before
     println("Let's get crackin'")
-    val crackE: ULong = 3u
-    val crackN: ULong = 15u
-    val crackMsg = encrypt(crackE, crackN, "ab")
-    crack(crackN, crackE, crackMsg)
+    /*val crackE: ULong = 17u
+    val crackN: ULong = 78427367u*/
+    val pq = crack(n3) //results in
+    val crackMessage = message3
+    /*val crackMessage = listOf<ULong>(
+        65445981uL,
+        833323uL,
+        56393491uL,
+        33554432uL,
+        39724391uL,
+        67125013uL,
+        833323uL,
+        36165923uL,
+        33554432uL,
+        27489765uL,
+        67125013uL,
+        63309587uL
+    )*/
+    val phiN4 = (pq.first - 1uL) * (pq.second - 1uL)
+    val d4 = modInverse(e3, phiN4) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
+    val cracked = decrypt(d4, n3, crackMessage)
+    println(cracked)
 }
 
 // c = m^e mod n, Pro Buchstabe gibt die methode ein Resultat in der ArryList zurück, resultate sind c1, c2, ... , cn
@@ -160,9 +179,10 @@ fun modInverse(a: ULong, m: ULong): ULong {
 }
 
 
-fun crack(n: ULong, e: ULong, message: List<ULong>) {
+fun crack(n: ULong): Pair<ULong, ULong> {
     val near = sqrt(n.toDouble()).toULong()
-    val primes = primes(n)
+    val primes = sieveOfEratosthenes(n.toInt())
+    println("primes calculated :D")
     val nextPrimes = primes.filter { it >= near }
     val previousPrimes = primes.filter { it <= near }
 
@@ -171,29 +191,47 @@ fun crack(n: ULong, e: ULong, message: List<ULong>) {
 
         for (j in previousPrimes.indices.reversed()) {
             val q = primes[j]
-            println("p: $p q: $q")
-            val phiN = (p - 1u) * (q - 1u)
-            val d = modInverse(e, phiN)
-            if (decrypt(d, n, message) == "ab") {
+            if (p * q == n) {
                 println("cracked :D p: $p, q: $q")
+                return Pair(p, q)
             }
         }
     }
+
+    return Pair(0uL, 0uL)
 }
 
 //Primes until n
-fun primes(n: ULong): MutableList<ULong> {
-    val li: MutableList<ULong> = mutableListOf(2u)
-    val zero: ULong = 0u
-    val from: ULong = 2u
-    for (num in from..n + 1u) {
-        for (i in from..num) {
-            if (num % i == zero) {
-                if (num == i) li.add(num) else break
+fun sieveOfEratosthenes(n: Int): List<ULong> {
+    // Create a boolean array "prime[0..n]" and initialize
+    // all entries it as true. A value in prime[i] will
+    // finally be false if i is Not a prime, else true.
+    val prime = mutableListOf<Boolean>()
+    for (i in 0..n) {
+        prime.add(true)
+    }
+    var p = 2
+    while (p * p <= n) {
+
+        // If prime[p] is not changed, then it is a prime
+        if (prime[p]) {
+            // Update all multiples of p
+            var i = p * p
+            while (i <= n) {
+                prime[i] = false
+                i += p
             }
         }
+        p++
     }
-    return li
+
+    val res = mutableListOf<ULong>()
+    for (i in 2..n) {
+        if (prime[i]) {
+            res.add(i.toULong())
+        }
+    }
+    return res.toList()
 }
 
 /**
