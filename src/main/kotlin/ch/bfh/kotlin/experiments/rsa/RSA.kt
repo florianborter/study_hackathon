@@ -6,7 +6,7 @@ import kotlin.math.sqrt
 /*
 Excercise A:  111416463    179103703    88614043    179103703    79460541    108344112    996051    899109    46332557
 Excercise B: doesn't work, see email to Daniel Tokarev. Works with other Data e.g. Student Secret Number = 4381: secure
-Excercise C: See crack method (Data wrong as well, used data from B)
+Excercise C: See crack method (Data wrong as well, used data again from SSN = 4381): p = 6113, q = 6037, message = means are not
 Excercise D: See Bottom of File
 */
 
@@ -25,14 +25,13 @@ fun main() {
     val decrypted1 = decrypt(d1, n1, encrypted1)
     println(decrypted1)
 
-
-    val p2: ULong = 19319u
+    //Something with this data is wrong
+    /*val p2: ULong = 19319u
     val q2: ULong = 40153u
     val e2: ULong = 5u //this is the Public Key
     val n2: ULong = p2 * q2
     val phiN2 = (p2 - 1u) * (q2 - 1u)
 
-    //Something with this data is wrong
     val message2 = listOf<ULong>(
         5706795u,
         37360752u,
@@ -49,7 +48,7 @@ fun main() {
         37360752u
     )
 //    val d2: ULong = 620525069u
-    /*val d2 = modInverse(e2, phiN2) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
+    val d2 = modInverse(e2, phiN2) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
 
     val decrypted2 = decrypt(d2, n2, message2)
     println(decrypted2)*/
@@ -72,27 +71,27 @@ fun main() {
 
     //The parameters for part c are also wrong, so using other parameters from before
     println("Let's get crackin'")
-    /*val crackE: ULong = 17u
-    val crackN: ULong = 78427367u*/
-    val pq = crack(n3) //results in
-    val crackMessage = message3
-    /*val crackMessage = listOf<ULong>(
-        65445981uL,
-        833323uL,
-        56393491uL,
+    val crackE: ULong = 11uL
+    val crackN: ULong = 36904181uL
+    val pq = crack(crackN) //results in
+    val crackMessage = listOf(
+        34100253uL,
+        29313097uL,
+        25570265uL,
+        14877084uL,
+        793230uL,
         33554432uL,
-        39724391uL,
-        67125013uL,
-        833323uL,
-        36165923uL,
+        25570265uL,
+        27067523uL,
+        29313097uL,
         33554432uL,
-        27489765uL,
-        67125013uL,
-        63309587uL
-    )*/
-    val phiN4 = (pq.first - 1uL) * (pq.second - 1uL)
-    val d4 = modInverse(e3, phiN4) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
-    val cracked = decrypt(d4, n3, crackMessage)
+        14877084uL,
+        22275015uL,
+        4937587uL
+    )
+    val crackPhiN = (pq.first - 1uL) * (pq.second - 1uL)
+    val crackD = modInverse(e3, crackPhiN) //e * d = 1 (mod (p-1)*(q-1) ) // e * d = 1 (mod phiN )
+    val cracked = decrypt(crackD, crackN, crackMessage)
     println(cracked)
 }
 
@@ -178,7 +177,13 @@ fun modInverse(a: ULong, m: ULong): ULong {
     return 1u
 }
 
-
+/**
+ * Tries to find out p and q.
+ * Approach: calculate primes until n
+ * take the square-root of n
+ * split the primes into the ones bigger than the square-root and smaller than the square-root
+ * try p * q with the respective primes, using the next respectively previous primes.
+ */
 fun crack(n: ULong): Pair<ULong, ULong> {
     val near = sqrt(n.toDouble()).toULong()
     val primes = sieveOfEratosthenes(n.toInt())
@@ -235,6 +240,12 @@ fun sieveOfEratosthenes(n: Int): List<ULong> {
 }
 
 /**
- * TODO: Explanation why rsa
+ * RSA is still widely used (and secure), for instance in encryption of browser connection (HTTPS), for verifying the sender of messages, encrypting emails as well as using it for secure data transmission (e.g. ssh)
+ * However RSA is only secure if long enough keys are used. As well, the gap between the primes has to be as high as possible to ensure security.
+ * This leads to one of the downsides of RSA: It's keys are very large
+ * Another downside of RSA is, it's not proof against quantum computing. Quantum Computers would be capable of cracking keys within a short time.
+ * Tackling long keys, ECC (Elliptic Curve Cryptography) is a cryptography method with smaller keys. It is also considered stronger than RSA. However, it's not "quantum-proof" too.
+ * There are already a couple of approaches to quantum-proof encryption. For instance Lattice-based cryptography and multivariate cryptography (https://en.wikipedia.org/wiki/Post-quantum_cryptography#Algorithms)
  *
+ * In my opinion RSA will still stay for longer if there is no major breakthrough in quantum-computing and no major vulnerabilities are found.
  */
