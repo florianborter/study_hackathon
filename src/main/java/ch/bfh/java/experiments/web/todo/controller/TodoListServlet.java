@@ -21,7 +21,8 @@ public class TodoListServlet extends HttpServlet {
     private final TodoList todoList = new TodoList();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, MalformedURLException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        /* This is used for simple html response
         response.setContentType("text/html");
 
         InputStream inputStream = this.getServletContext().getResourceAsStream("./" + "todo.html");
@@ -31,11 +32,15 @@ public class TodoListServlet extends HttpServlet {
         } catch (IOException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
-        }
+        }*/
+
+        request.setAttribute("todos", todoList.getTodos());
+        request.getRequestDispatcher("todoList.jsp").forward(request, response);
+
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String title = request.getParameter("title");
         String category = request.getParameter("category");
         String dueDateString = request.getParameter("dueDate");
