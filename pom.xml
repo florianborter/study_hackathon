@@ -7,8 +7,8 @@
     <groupId>ch.bfh</groupId>
     <artifactId>kotlin_examples</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging> <!--Use this when not doing webdev-->
-<!--    <packaging>war</packaging> &lt;!&ndash;Use This when doing web-dev with war-package&ndash;&gt;-->
+<!--    <packaging>jar</packaging> &lt;!&ndash;Use this when not doing webdev&ndash;&gt;-->
+    <packaging>war</packaging> <!--Use This when doing web-dev with war-package-->
 
     <properties>
         <kotlin.version>1.7.21</kotlin.version>
