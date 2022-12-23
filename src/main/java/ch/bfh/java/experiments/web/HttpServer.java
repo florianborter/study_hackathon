@@ -7,6 +7,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class HttpServer {
@@ -34,26 +35,16 @@ public class HttpServer {
                         continue;
                     }
 
-                    File file = new File("src\\main\\resources\\web" + requestLine[1]);
-                    if (!file.exists()) {
+                    String path = requestLine[1];
+                    if (!path.endsWith("\\")) {
+                        path += "index.html";
+                    }
+
+                    Path file = Paths.get("src\\main\\resources\\web", path);
+                    if (!Files.isRegularFile(file)) {
                         error404Response(writer);
                     } else {
-                        if (file.isFile()) {
                             okResponse(writer, outputStream, file);
-                        }
-                        if (file.isDirectory()) {
-                            String newPath = "src\\main\\resources\\web" + requestLine[1].replace("/", "\\");
-                            if (!newPath.endsWith("\\")) {
-                                newPath += "\\";
-                            }
-                            newPath += "index.html";
-                            File possibleIndexFile = new File(newPath);
-                            if (possibleIndexFile.exists()) {
-                                okResponse(writer, outputStream, file);
-                            } else {
-                                error404Response(writer);
-                            }
-                        }
                     }
                 }
             } finally {
@@ -72,24 +63,11 @@ public class HttpServer {
         writer.println();
     }
 
-    private static void okResponse(PrintWriter writer, OutputStream outputStream, File file) {
+    private static void okResponse(PrintWriter writer, OutputStream outputStream, Path filePath) throws IOException {
         writer.println("HTTP/1.0 200 OK");
+        writer.println("Content-Type: " + Files.probeContentType(filePath));
+        writer.println("Content-Length: " + Files.size(filePath));
         writer.println();
-        if (file != null) {
-            try {
-                String[] splittedFileName = file.getName().split("\\.");
-                String ending = splittedFileName[splittedFileName.length - 1];
-                if (ending.equals("html") || ending.equals("css")) {
-                    writer.println(String.join("\n", Files.readAllLines(file.toPath())));
-                } else {
-                    outputStream.write(Files.readAllBytes(file.toPath()));
-                    outputStream.flush();
-                }
-            } catch (IOException e) {
-                System.out.println("Error occured: " + e.getMessage());
-                e.printStackTrace();
-            }
-
-        }
+        outputStream.write(Files.readAllBytes(filePath));
     }
 }
