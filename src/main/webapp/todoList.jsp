@@ -3,9 +3,14 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>TodoList</title>
 </head>
 <body>
+    <c:if test="${empty user}">
+        <c:redirect url="login.jsp"/>
+    </c:if>
+    <h1>${user.name}'s Todo List</h1>
+
     <table>
         <tr>
             <th>Title</th>
@@ -20,6 +25,9 @@
             </tr>
         </c:forEach>
     </table>
-    <a href="todo.jsp" class="button primary">New Todo</a>
+    <form action="/userAdmin" method="post">
+        <a href="todo.jsp" class="button primary">New Todo</a>
+        <button name="action" type="submit" value="logout">Logout</button>
+    </form>
 </body>
 </html>

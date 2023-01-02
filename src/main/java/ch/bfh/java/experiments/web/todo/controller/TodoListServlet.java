@@ -2,6 +2,7 @@ package ch.bfh.java.experiments.web.todo.controller;
 
 import ch.bfh.java.experiments.web.todo.model.todo.Todo;
 import ch.bfh.java.experiments.web.todo.model.todo.TodoList;
+import ch.bfh.java.experiments.web.todo.model.user.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,40 +17,38 @@ import java.util.Locale;
 @WebServlet("/todoList")
 public class TodoListServlet extends HttpServlet {
 
-    private final TodoList todoList = new TodoList();
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        /* This is used for simple html response
-        response.setContentType("text/html");
+        User user = (User) request.getSession().getAttribute("user");
 
-        InputStream inputStream = this.getServletContext().getResourceAsStream("./" + "todo.html");
-
-        try {
-            response.getOutputStream().write(inputStream.readAllBytes());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }*/
-
-        request.setAttribute("todos", todoList.getTodos());
-        request.getRequestDispatcher("todoList.jsp").forward(request, response);
-
+        if (user != null) {
+            request.setAttribute("todos", user.getTodoList().getTodos());
+            request.getRequestDispatcher("todoList.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String title = request.getParameter("title");
-        String category = request.getParameter("category");
-        String dueDateString = request.getParameter("dueDate");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user != null) {
+            String title = request.getParameter("title");
+            String category = request.getParameter("category");
+            String dueDateString = request.getParameter("dueDate");
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        formatter = formatter.withLocale(Locale.GERMAN);
-        LocalDate dueDate = LocalDate.parse(dueDateString, formatter);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            formatter = formatter.withLocale(Locale.GERMAN);
+            LocalDate dueDate = LocalDate.parse(dueDateString, formatter);
 
-        Todo todo = new Todo(title, category, dueDate);
-        todoList.addTodo(todo);
+            Todo todo = new Todo(title, category, dueDate);
+            user.getTodoList().addTodo(todo);
 
-        response.sendRedirect("todoList");
+            response.sendRedirect("todoList");
+        } else  {
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+
+
     }
 }
