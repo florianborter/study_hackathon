@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Registration</title>
+	<style>
+		body { font-family: sans-serif; max-width: 600px; margin: 20px auto; }
+		form { line-height: 30px; }
+		label { display: inline-block; width: 150px; }
+		input { font-size: 1em; width: 250px; }
+		button { font-size: 1em; margin-top: 20px; }
+	</style>
+	<script defer src="../../js/exerciseEnhancedWebPages/registration.js"></script>
+</head>
+<body>
+	<h2>Registration</h2>
+	<form method="post">
+		<label>Name</label><input name="name" required><br>
+		<label>Email</label><input name="email" type="email" required><br>
+		<label>Password</label><input id="pw1" name="pw1" type="password" required><br>
+		<label>Repeat Password</label><input id="pw2" name="pw2" type="password" required><br>
+		<button id="submit" type="submit" disabled>Register</button>
+	</form>
+</body>
+</html>
