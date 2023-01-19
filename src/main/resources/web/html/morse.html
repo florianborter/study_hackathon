@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <script src="../js/morse.js"></script>
+  <script src="../js/encoding.js"></script>
+  <textarea id="unencoded"></textarea>
+  <button onclick="document.getElementById('encoded').value = encodeMorse(document.getElementById('unencoded').value)">Encode String</button>
+  <textarea id="encoded"></textarea>
+  <br><br><br>
+    <button onclick="test(document.getElementById('unencoded').value)">Encode (see console for output)</button>
+</body>
+</html>
