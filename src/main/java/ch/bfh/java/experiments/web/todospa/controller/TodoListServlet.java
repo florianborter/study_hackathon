@@ -32,7 +32,7 @@ public class TodoListServlet extends HttpServlet {
 				response.setContentType("application/json");
 				objectMapper.writeValue(response.getOutputStream(), todos);
 			} else {
-				// get todo
+				// get todoM
 				int id = Integer.parseInt(pathInfo.substring(1));
 				User user = (User) request.getAttribute("user");
 				Todo todo = user.getTodoList().findTodo(id);
@@ -56,13 +56,13 @@ public class TodoListServlet extends HttpServlet {
 				response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 				return;
 			}
-			// parse and validate todo
+			// parse and validate todoM
 			Todo todo = objectMapper.readValue(request.getInputStream(), Todo.class);
 			if (todo.getId() != null || todo.getTitle() == null || todo.getTitle().isEmpty()) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return;
 			}
-			// add todo
+			// add todoM
 			User user = (User) request.getAttribute("user");
 			user.getTodoList().addTodo(todo);
 			response.setStatus(HttpServletResponse.SC_CREATED);
@@ -83,14 +83,14 @@ public class TodoListServlet extends HttpServlet {
 				response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 				return;
 			}
-			// parse and validate todo
+			// parse and validate todoM
 			int id = Integer.parseInt(pathInfo.substring(1));
 			Todo todo = objectMapper.readValue(request.getInputStream(), Todo.class);
 			if (todo.getId() != id || todo.getTitle() == null || todo.getTitle().isEmpty()) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				return;
 			}
-			// update todo
+			// update todoM
 			User user = (User) request.getAttribute("user");
 			user.getTodoList().updateTodo(todo);
 			response.setStatus(HttpServletResponse.SC_OK);
@@ -112,7 +112,7 @@ public class TodoListServlet extends HttpServlet {
 				response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 				return;
 			}
-			// remove todo
+			// remove todoM
 			int id = Integer.parseInt(pathInfo.substring(1));
 			User user = (User) request.getAttribute("user");
 			user.getTodoList().removeTodo(id);
