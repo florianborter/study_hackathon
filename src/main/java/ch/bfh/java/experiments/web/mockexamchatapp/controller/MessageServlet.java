@@ -1,7 +1,7 @@
-package chatapp.controller;
+package ch.bfh.java.experiments.web.mockexamchatapp.controller;
 
-import chatapp.model.ChatMessage;
-import chatapp.model.ChatService;
+import ch.bfh.java.experiments.web.mockexamchatapp.model.ChatMessage;
+import ch.bfh.java.experiments.web.mockexamchatapp.model.ChatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
-@WebServlet("/api/messages/*")
+@WebServlet("/api4/messages/*")
 public class MessageServlet extends HttpServlet {
 
 	private static final Logger logger = Logger.getLogger(MessageServlet.class.getName());

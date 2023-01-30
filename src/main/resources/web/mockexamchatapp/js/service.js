@@ -1,4 +1,4 @@
-const BASE_URI = '/api';
+const BASE_URI = '/api4';
 
 export default {
 	getMessages: function(subject) {

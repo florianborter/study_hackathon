@@ -1,4 +1,4 @@
-package chatapp.controller;
+package ch.bfh.java.experiments.web.mockexamchatapp.controller;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
