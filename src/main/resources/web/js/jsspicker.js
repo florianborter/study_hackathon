@@ -1,3 +1,7 @@
+/*********************************/
+/****** Types of variables *******/
+/*********************************/
+
 // Values of differenet types
 let x = 12;
 console.log(typeof x);    // number
@@ -15,6 +19,9 @@ y = 12 + Number("10");
 console.log(typeof y);    // number
 
 
+/*********************************/
+/****** Equality/identical *******/
+/*********************************/
 // Equal but not identical
 let x = 7;
 let y = "7";
@@ -22,6 +29,10 @@ let y = "7";
 console.log(x == y);               // true
 console.log(x === y);              // false
 console.log(x === parseInt(y));    // true
+
+/*********************************/
+/************ Loops **************/
+/*********************************/
 
 let colors = ["red", "blue", "green"];
 
@@ -40,6 +51,11 @@ colors.forEach(function(item, index) {
     console.log(index + ":" + item);    // 0:red 1:blue 2:green
 });
 
+
+/*********************************/
+/************ Arrays *************/
+/*********************************/
+
 // Value insertion
 a[a.length] = 7;    // [2, 3, 5, 7]
 a[6] = 11;          // [2, 3, 5, 7, , , 11]
@@ -51,7 +67,9 @@ a.splice(4, 2);     // [2, 3, 5, 7, 11]
 a.push(13);         // [2, 3, 5, 7, 11, 13]
 a.pop();            // [2, 3, 5, 7, 11]
 
-//Closure
+/*********************************/
+/*********** Closure *************/
+/*********************************/
 const initval = 0;
 
 let getCounter = function() {
@@ -70,6 +88,9 @@ console.log(counter1());        // 3
 let counter2 = getCounter();    // closure
 console.log(counter2());        // 1
 
+/*********************************/
+/****** Objects / Prototypes *****/
+/*********************************/
 // Object literal
 let alice = {
     name: "Alice",
@@ -122,6 +143,10 @@ class Student extends Person {
     }
 }
 
+
+/*********************************/
+/********* DOM Traversal *********/
+/*********************************/
 // Get a HTMLCollection of nodes by tag name
 document.getElementsByTagName('a');
 // Get a HTMLCollection of nodes by class name
@@ -170,6 +195,9 @@ myList.appendChild(li);
 // Nodes can also be created implicitly by using the innerHTML property
 li.innerHTML = "An <b>important</b> item";
 
+/*********************************/
+/************ Events *************/
+/*********************************/
 // Event handlers can also be removed again
 function once() {
     console.log('Done.');
@@ -185,7 +213,9 @@ console.log(e.offsetY); // -> The y coordinate of the mouse pointer
 // relative to the position of the target
 
 
-
+/*********************************/
+/************* AJAX **************/
+/*********************************/
 // Create a new XMLHttpRequest object
 const xhr = new XMLHttpRequest();
 // Specify the type of request: method and url
@@ -207,7 +237,9 @@ xhr.onreadystatechange = function() {
 // Send the request
 xhr.send();
 
-
+/*********************************/
+/************ JQuery *************/
+/*********************************/
 // On document ready...
 $(function() {
 // Set the css property color of each div to red
@@ -252,7 +284,9 @@ $.post(
     function(person) { $('#person').html(person.name + " is " + person.age); },
     "json");
 
-
+/*********************************/
+/************** Misc *************/
+/*********************************/
 const a = [1, 2, 3, 4];
 const [first, second] = a;
 console.log(first); // >> 1
@@ -262,7 +296,9 @@ const {b, c} = x;
 console.log(b); // >> bar
 console.log(c); // >> 12
 
-
+/*********************************/
+/******* Asynch / Promises *******/
+/*********************************/
 function computeAsync() {
     return new Promise((resolve, reject) => {
 // ... Perform the asynchronous task (Promise is pending)
