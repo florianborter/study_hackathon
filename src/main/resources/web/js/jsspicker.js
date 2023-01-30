@@ -341,7 +341,7 @@ async function computeDiskArea(radius) {
 let test = await fetch('http://news.org', {
     method: 'POST',
     headers: {
-        'Authorization:': 'Basic amRAZXhhbXBsZS5vcmc6MTIzNDU=',
+        'Authorization:': 'Basic <base64 encoded username.password here>',
         'Content-Type': 'application/json'
     },
     body: JSON.stringify(article)
