@@ -10,7 +10,7 @@ import ch.bfh.java.experiments.softwareengineering.sampleexam.pcinventory.pcicar
 import ch.bfh.java.experiments.softwareengineering.sampleexam.pcinventory.pcicard.GPU;
 
 public class Inventory {
-    public static void main(String[] args) {
+    public void buildInventory() {
         Computer computer = new Computer(0, "PC1");
 
         var monitor = new Monitor(1000, "27\" 4K LCD-Monitor");
