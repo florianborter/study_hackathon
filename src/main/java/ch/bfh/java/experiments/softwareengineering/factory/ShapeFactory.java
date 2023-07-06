@@ -9,5 +9,23 @@ public class ShapeFactory {
             case HEXAGON -> new MyHexagon();
             default -> null;
         };
+
+        /*
+        switch (shapeType) {
+            case CIRCLE -> {
+                return new MyCircle();
+            }
+            case RECTANGLE -> {
+                new MyRectangle();
+            }
+            case SQUARE -> {
+                new MySquare();
+            }
+            case HEXAGON -> {
+                new MyHexagon();
+            }
+        }
+        return null;
+        */
     }
 }
