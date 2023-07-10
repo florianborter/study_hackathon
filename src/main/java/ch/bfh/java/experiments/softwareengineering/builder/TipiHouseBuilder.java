@@ -7,20 +7,24 @@ class TipiHouseBuilder implements HouseBuilder { //Concrete builder
         this.house = new House();
     }
 
-    public void buildBasement() {
+    public HouseBuilder buildBasement() {
         house.setBasement("Wooden Poles");
+        return this;
     }
 
-    public void buildStructure() {
+    public HouseBuilder buildStructure() {
         house.setStructure("Wood and Ice");
+        return this;
     }
 
-    public void buildInterior() {
+    public HouseBuilder buildInterior() {
         house.setInterior("Fire Wood");
+        return this;
     }
 
-    public void buildRoof() {
+    public HouseBuilder buildRoof() {
         house.setRoof("Wood, caribou and seal skins");
+        return this;
     }
 
     public House getHouse() {

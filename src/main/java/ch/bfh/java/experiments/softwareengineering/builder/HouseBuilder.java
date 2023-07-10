@@ -3,13 +3,13 @@ package ch.bfh.java.experiments.softwareengineering.builder;
 
 public interface HouseBuilder { //This is the abstract Builder
 
-    public void buildBasement();
+    HouseBuilder buildBasement();
 
-    public void buildStructure();
+    HouseBuilder buildStructure();
 
-    public void buildRoof();
+    HouseBuilder buildRoof();
 
-    public void buildInterior();
+    HouseBuilder buildInterior();
 
-    public House getHouse();
+    House getHouse();
 }
