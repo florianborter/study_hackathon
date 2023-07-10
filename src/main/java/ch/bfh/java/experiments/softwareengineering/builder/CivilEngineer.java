@@ -12,9 +12,9 @@ class CivilEngineer { //Director class
     }
 
     public void constructHouse() {
-        houseBuilder.buildBasement();
-        houseBuilder.buildStructure();
-        houseBuilder.buildRoof();
-        houseBuilder.buildInterior();
+        houseBuilder.buildBasement()
+                .buildStructure()
+                .buildRoof()
+                .buildInterior();
     }
 }

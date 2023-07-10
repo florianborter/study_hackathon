@@ -8,23 +8,27 @@ public class IglooHouseBuilder implements HouseBuilder { //Concrete builder
     }
 
     @Override
-    public void buildBasement() {
+    public HouseBuilder buildBasement() {
         house.setBasement("Ice bars");
+        return this;
     }
 
     @Override
-    public void buildStructure() {
+    public HouseBuilder buildStructure() {
         house.setStructure("Ice blocks");
+        return this;
     }
 
     @Override
-    public void buildRoof() {
+    public HouseBuilder buildRoof() {
         house.setRoof("Ice Carvings");
+        return this;
     }
 
     @Override
-    public void buildInterior() {
+    public HouseBuilder buildInterior() {
         house.setInterior("Ice Dome");
+        return this;
     }
 
     @Override
