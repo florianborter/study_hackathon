@@ -1,6 +1,6 @@
 package ch.bfh.java.experiments.softwareengineering.decorator;
 
-public class Cream extends BeverageDecorator {
+public class Cream extends IngredientDecorator {
     public Cream(Beverage beverage) {
         super(beverage);
     }

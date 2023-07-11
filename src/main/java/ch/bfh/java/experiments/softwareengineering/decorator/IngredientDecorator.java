@@ -1,9 +1,9 @@
 package ch.bfh.java.experiments.softwareengineering.decorator;
 
-public abstract class BeverageDecorator implements Beverage {
+public abstract class IngredientDecorator implements Beverage {
     protected Beverage beverage;
 
-    public BeverageDecorator(Beverage beverage) {
+    public IngredientDecorator(Beverage beverage) {
         this.beverage = beverage;
     }
 

@@ -1,6 +1,6 @@
 package ch.bfh.java.experiments.softwareengineering.decorator;
 
-public class Mocha extends BeverageDecorator {
+public class Mocha extends IngredientDecorator {
     public Mocha(Beverage beverage) {
         super(beverage);
     }
